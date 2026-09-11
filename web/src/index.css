@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+/* Jetons de design.
+   Les huit teintes categorielles et les quatre couleurs de statut viennent d'une
+   palette validee : separation suffisante en vision normale ET en simulation de
+   daltonisme, contraste verifie sur les deux fonds. L'ordre des emplacements est
+   le mecanisme de securite, pas un choix esthetique — on les attribue toujours
+   dans cet ordre, jamais en cycle.
+   Une couleur de statut n'est jamais reutilisee comme couleur de serie, et elle
+   est toujours accompagnee d'un libelle : la teinte seule ne porte jamais le sens. */
+:root {
+  color-scheme: dark;
+
+  --surface-0: #111110;
+  --surface-1: #1a1a19;
+  --surface-2: #232322;
+  --surface-3: #2d2d2b;
+  --border: #383835;
+  --border-strong: #4a4a46;
+
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #8a8980;
+
+  --series-1: #3987e5; /* bleu    */
+  --series-2: #d95926; /* orange  */
+  --series-3: #199e70; /* aqua    */
+  --series-4: #c98500; /* jaune   */
+  --series-5: #d55181; /* magenta */
+  --series-6: #008300; /* vert    */
+  --series-7: #9085e9; /* violet  */
+  --series-8: #e66767; /* rouge   */
+
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-serious: #ec835a;
+  --status-critical: #d03b3b;
+
+  /* Rampe ordinale pour l'entonnoir du pipeline : une seule teinte, du clair au
+     fonce. Sur fond sombre, on ne descend pas sous le pas 600 pour rester
+     lisible. */
+  --ramp-1: #86b6ef;
+  --ramp-2: #5598e7;
+  --ramp-3: #3987e5;
+  --ramp-4: #2a78d6;
+  --ramp-5: #256abf;
+  --ramp-6: #1c5cab;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --surface-0: #f6f5f2;
+  --surface-1: #fcfcfb;
+  --surface-2: #f0efec;
+  --surface-3: #e7e6e2;
+  --border: #dcdbd6;
+  --border-strong: #c3c2b7;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #77766f;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+  --series-7: #4a3aa7;
+  --series-8: #e34948;
+}
+
+@theme inline {
+  --color-surface-0: var(--surface-0);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-ink: var(--text-primary);
+  --color-ink-2: var(--text-secondary);
+  --color-ink-3: var(--text-muted);
+  --color-s1: var(--series-1);
+  --color-s2: var(--series-2);
+  --color-s3: var(--series-3);
+  --color-s4: var(--series-4);
+  --color-s5: var(--series-5);
+  --color-s6: var(--series-6);
+  --color-s7: var(--series-7);
+  --color-s8: var(--series-8);
+  --color-good: var(--status-good);
+  --color-warn: var(--status-warning);
+  --color-serious: var(--status-serious);
+  --color-critical: var(--status-critical);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  /* Le contenu large (tableaux, graphiques) defile DANS son conteneur ; la
+     page elle-meme ne part jamais de travers. */
+  overflow-x: hidden;
+  background: var(--surface-0);
+  color: var(--text-primary);
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Chiffres alignes en colonne : indispensable des qu'on compare des nombres
+   dans un tableau. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--series-1) 55%, transparent); }
+  70% { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.running-ring {
+  animation: pulse-ring 1.6s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .running-ring {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}

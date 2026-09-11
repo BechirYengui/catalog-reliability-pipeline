@@ -1,0 +1,450 @@
+% ============================================================
+%  Exercice technique ULTY : Annexes
+%  Candidat : Bechir Yengui
+%  Compilation : pdflatex (2 passes conseillées)
+%
+%  Toutes les affirmations de ce document ont été confrontées à
+%  l'implémentation. Ce qui est décrit au présent est en place ;
+%  ce qui ne l'est pas est annoncé comme tel.
+% ============================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[provide=*,french]{babel}
+\usepackage[scaled=0.94]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{pifont}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\linespread{1.08}
+% ---------- Couleurs ----------
+\definecolor{accent}{HTML}{2A5C8A}
+\definecolor{okgreen}{HTML}{1B7A43}
+\definecolor{kored}{HTML}{B00020}
+\definecolor{amber}{HTML}{C77700}
+\definecolor{soft}{HTML}{667080}
+\definecolor{rulec}{HTML}{D8DEE6}
+\definecolor{bgblue}{HTML}{EEF3F8}
+\definecolor{bgamber}{HTML}{FDF3E3}
+% ---------- Icônes / raccourcis ----------
+\newcommand{\ok}{\textcolor{okgreen}{\ding{51}}}
+\newcommand{\ko}{\textcolor{kored}{\ding{55}}}
+\newcommand{\pa}{\textcolor{amber}{\small\ding{108}}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+% Guillemets : les caractères UTF-8 « » ne survivent pas à toutes les
+% chaînes de compilation (ils sortent « ń » et « ż » sous XeTeX). Les macros
+% T1 rendent correctement avec pdflatex comme avec xelatex.
+\newcommand{\gui}[1]{\guillemotleft{}~#1~\guillemotright{}}
+% ---------- Titres ----------
+\titleformat{\section}
+  {\color{accent}\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{name=\section,numberless}
+  {\color{accent}\large\bfseries}{}{0em}{}
+\titleformat{\subsection}
+  {\color{black}\normalsize\bfseries}{}{0em}{}
+\titlespacing*{\section}{0pt}{14pt}{5pt}
+\titlespacing*{\subsection}{0pt}{8pt}{3pt}
+% ---------- Listes ----------
+\setlist[itemize]{label=\textbullet,leftmargin=1.25em,itemsep=2.5pt,topsep=3pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.55em,itemsep=2.5pt,topsep=3pt}
+% ---------- Boîtes ----------
+\newtcolorbox{verdictbox}{
+  enhanced, colback=bgblue, colframe=accent,
+  boxrule=0.9pt, arc=2mm, left=8pt, right=8pt, top=6pt, bottom=6pt}
+\newtcolorbox{notebox}{
+  enhanced, colback=bgamber, colframe=amber,
+  boxrule=0.7pt, arc=2mm, left=8pt, right=8pt, top=5pt, bottom=5pt}
+\newcommand{\candidat}{Bechir Yengui}
+\begin{document}
+
+% =================== EN-TÊTE ===================
+\begin{center}
+{\LARGE\bfseries\color{accent}Annexes techniques pour le cas pratique\\[2pt] d'automatisation pour ULTY}\\[6pt]
+{\color{soft}\small \candidat\ \ \textbullet\ \ Exercice technique, Solutions Engineer\ \ \textbullet\ \ \today}\\[3pt]
+{\color{rulec}\rule{\linewidth}{0.8pt}}
+\end{center}
+
+% =================== RÉSUMÉ ===================
+\begin{verdictbox}
+\textbf{Ce que couvrent ces annexes.} L'annexe~A répond aux questions d'exploitation~: comment le
+pipeline tient la charge, encaisse les pannes et protège la donnée client. L'annexe~B assume chaque
+choix d'outillage face à l'alternative écartée.
+
+\textbf{Convention de lecture.} Le pipeline décrit est implémenté et déployé. Ce qui est écrit au
+présent existe et se vérifie dans le code~; ce qui reste à faire est marqué \pa{} et annoncé comme
+tel. Je préfère une annexe qui distingue les deux à une annexe qui décrit un système idéal.
+\end{verdictbox}
+
+% =================== ANNEXE A ===================
+\section*{Annexe A. Tenue en charge, robustesse, sécurité}
+
+\subsection{Modèle d'exécution : batch par fichier}
+Je traite chaque fichier comme un tout, et c'est un choix assumé, pas une limite. La résolution
+d'entités est une opération d'ensemble~: pour savoir que deux lignes décrivent le même produit, il
+faut voir les deux. Un traitement strictement ligne à ligne ne peut donc, par construction, pas
+dédupliquer. Et la source est de toute façon un dépôt quotidien~: le fichier est l'unité de travail
+naturelle.
+
+\textbf{Ce qui est parallèle aujourd'hui}, à l'intérieur d'un fichier~: les requêtes \code{HEAD} de
+vérification d'images partent en asynchrone avec une limite de concurrence, et le LLM ne reçoit que
+les libellés distincts, groupés en lots. Ces deux points sont les seuls coûteux~: 10\,000 lignes se
+traitent en \textbf{environ 2~secondes} hors réseau, contre plusieurs minutes dès qu'il faut
+interroger les \textbf{9\,086} URLs réellement requêtables du fichier.
+
+\textbf{Ce qui ne l'est pas encore \pa{}}~: le service tourne en un seul processus, et deux dépôts
+simultanés s'exécutent en tâches concurrentes sur la même instance, pas sur un pool de workers.
+Passer à N~workers ne demande aucune réécriture du pipeline, qui est déjà une fonction pure du
+fichier, mais demande de sortir la file d'exécution du processus. C'est le premier chantier
+d'industrialisation, pas un préalable au fonctionnement.
+
+Les écritures au référentiel se font par mise à jour en place sur la clé naturelle du produit chez
+son magasin, pas par effacement puis réinsertion. Deux enseignes traitées en même temps ne se
+marchent donc jamais dessus. Deux dépôts \emph{du même magasin} en parallèle, si~: c'est le seul cas
+à sérialiser, et il est verrouillé par une contrainte d'unicité qui fait échouer le second au lieu
+de le laisser corrompre le catalogue.
+
+\subsection{Montée en volume}
+Le modèle passe de 10\,000 lignes à plusieurs millions sans changer de forme. Polars traite des
+millions de lignes en mémoire sans difficulté, et le \emph{blocking} maintient la déduplication en
+temps quasi linéaire au lieu de quadratique.
+
+Le cache LLM porte sur le libellé, et sa clé ne contient pas le magasin~: un libellé enrichi pour
+une enseigne est donc réutilisé pour toutes les autres. C'est l'économie qui grandit avec le
+volume~: plus il y a de magasins, plus la part de libellés déjà connus augmente, et plus le coût
+unitaire baisse. C'est mesuré~: sur les \textbf{273}~libellés que le LLM reçoit réellement (343 écritures
+distinctes dans le fichier, ramenées à 273 une fois les suffixes marketing détachés), un second
+dépôt comportant 5~\% de nouveautés ne refacture que ces 5~\%.
+
+\pa{} Pour un fichier réellement massif, le mode \emph{streaming} de Polars traiterait les données
+par morceaux sans tout charger en mémoire~; la déduplication resterait possible parce que le
+blocking la découpe déjà en groupes indépendants. Ce n'est pas branché aujourd'hui, faute de
+volume qui le justifie.
+
+\begin{notebox}
+\textbf{Le premier vrai mur à l'échelle}, ce ne sont pas les calculs, c'est la vérification des
+URLs d'images. Sur ce seul fichier, elle fait passer le traitement de deux secondes à plusieurs
+minutes~: \textbf{9\,086} requêtes, réparties sur \textbf{3} hôtes seulement.
+
+Ce rapport, beaucoup de requêtes vers très peu d'hôtes, est ce qui rend deux optimisations
+payantes, et toutes deux ont été trouvées par la mesure, pas par la lecture du code. La résolution
+DNS est mémorisée par hôte \emph{et par tâche concurrente}~: sans la seconde moitié, chaque tâche
+lancée en parallèle résolvait pour son compte et le cache ne servait à rien. Et un hôte qui refuse
+\code{HEAD} bascule définitivement en \code{GET} partiel, au lieu de repayer le repli sur chacune
+de ses URLs. À l'échelle de
+millions de requêtes par jour, il faudra en plus une file dédiée, des limites de débit par domaine
+et un cache de résultats avec durée de validité.
+\end{notebox}
+
+\subsection{Robustesse}
+Chaque étape écrit son résultat avant de passer la main~: nombre de lignes entrantes et sortantes,
+durée, corrections, anomalies, compteurs propres à l'étape. L'interface répond donc à tout instant
+à \gui{où en est mon fichier}, et après une panne on sait exactement à quelle étape le traitement
+s'est arrêté. \pa{} La reprise \emph{automatique} à l'étape suivante n'est pas encore branchée~:
+aujourd'hui un run interrompu est relancé depuis le début. Le coût est faible (environ 2~secondes hors
+réseau) et l'état persisté rend cette reprise simple à ajouter~; je préfère l'annoncer que la
+laisser croire.
+
+Le traitement est idempotent~: rejouer le même fichier pour le même magasin est refusé par une
+contrainte d'unicité sur l'empreinte SHA-256 du fichier, et un nouveau dépôt met à jour les fiches
+existantes au lieu de les empiler. Les appels externes (LLM, \code{HEAD}) ont des timeouts et des
+reprises avec repli exponentiel. Une indisponibilité du LLM dégrade le service au lieu de le
+bloquer~: les lots concernés partent en file d'attente, le compteur le signale, et le reste du
+fichier continue d'avancer. Un catalogue à moitié enrichi vaut mieux qu'un run en échec.
+
+J'ajoute un garde-fou global~: si la part de lignes portant au moins une anomalie bloquante dépasse
+\textbf{60~\%}, le pipeline n'intègre rien et met le fichier en quarantaine. Un tel saut signifie
+presque toujours que l'export du magasin a changé de format, et intégrer ce fichier ferait plus de
+dégâts que de le mettre de côté un jour. Le seuil est un paramètre, pas une constante enfouie.
+
+\subsection{Sécurité}
+Un catalogue est une donnée commerciale du client, je le traite comme tel. Voici ce qui est en
+place, et ce qui ne l'est pas~:
+\begin{itemize}
+  \item \ok\ \textbf{Chiffrement en transit}~: TLS sur tout l'accès, certificat renouvelé
+        automatiquement, redirection HTTP vers HTTPS.
+        \pa{} Le chiffrement \emph{au repos} du volume de base de données reste à activer~; il
+        dépend de l'hébergement retenu.
+  \item \ok\ \textbf{Séparation par magasin dans le modèle}~: chaque fiche produit, chaque
+        rattachement de ligne source et chaque tâche de revue porte son magasin, et le référentiel
+        d'un magasin est remplacé sans jamais toucher aux autres.
+        \pa{} \textbf{L'isolation multi-clients n'est pas encore imposée}~: dans la version
+        actuelle, tout utilisateur authentifié peut consulter le catalogue de tous les magasins, le
+        filtre par magasin étant un confort d'affichage et non une frontière. Passer à un vrai
+        cloisonnement demande de rattacher chaque compte à un périmètre et de l'appliquer côté
+        serveur sur chaque requête. C'est un prérequis avant d'héberger deux clients distincts, et
+        je ne le présente pas comme acquis.
+  \item \ok\ \textbf{Vers le LLM, le minimum nécessaire}~: uniquement des libellés produits et la
+        taxonomie de référence. Jamais de prix, de volumes de ventes ni de données client. Le champ
+        TVA n'est pas soumis au modèle du tout~: le prompt le lui interdit explicitement, et un
+        modèle ne peut pas se tromper sur une valeur qu'on ne lui montre pas. Le fournisseur d'API
+        retenu n'entraîne pas ses modèles sur les données transmises par API.
+  \item \ok\ \textbf{Aucun secret dans le dépôt}~: les clés vivent dans un fichier d'environnement
+        aux droits restreints sur le serveur, et dans les secrets chiffrés du système
+        d'intégration continue. La clé de déploiement est dédiée à ce projet et distincte de celles
+        des autres services de la machine.
+        \pa{} Un coffre de secrets dédié (type Vault) reste préférable dès qu'il y a plusieurs
+        environnements~; à un serveur, il ajouterait un système à opérer sans réduire la surface.
+  \item \ok\ \textbf{Interface de revue authentifiée, avec rôles vérifiés côté serveur}~: un
+        relecteur traite les libellés et les taxonomies, seul un administrateur peut valider un
+        taux de TVA. Le contrôle n'est pas seulement un bouton grisé dans l'interface, il est
+        rejoué par l'API~; le jeton de session est signé et posé dans un cookie inaccessible au
+        JavaScript.
+  \item \ok\ \textbf{Journal d'audit par champ}~: valeur d'origine, valeur corrigée, auteur (règle,
+        LLM ou humain), horodatage, et pour une décision humaine l'identité de son auteur. On peut
+        toujours expliquer une valeur et revenir en arrière. Et les 10\,000 lignes du fichier
+        gardent chacune le lien vers la fiche qui la représente, avec l'identifiant que le magasin
+        leur a donné~: fusionner ne coupe jamais le fil avec le système du magasin.
+\end{itemize}
+
+\subsection{Rythme et indicateurs}
+Le fichier arrive chaque jour, le verdict doit tomber en minutes~: c'est le cas. Les règles sont
+instantanées, les appels LLM ne concernent que les libellés jamais vus, et en régime de croisière
+un passage est essentiellement servi par le cache.
+
+Chaque exécution produit un rapport de qualité. L'indicateur du client est le \textbf{taux de
+produits publiables}, au sens strict~: identifiant exploitable (EAN valide ou code interne assumé),
+image \emph{vérifiée} et valide, taxonomie complète, TVA cohérente. Le mot \gui{vérifiée} compte~:
+une image dont l'URL n'a pas été contrôlée n'est pas une image valide, et le pipeline distingue les
+deux. Sans vérification réseau, aucun produit n'est déclaré publiable.
+
+\pa{} Deux indicateurs restent à instrumenter, et je les cite parce qu'ils sont la bonne façon de
+juger le pipeline, pas parce qu'ils existent déjà~:
+\begin{itemize}
+  \item le \textbf{delta avant/après} du taux publiable. Un taux absolu mélange la qualité de la
+        source, qu'on ne contrôle pas, et l'apport du pipeline. C'est l'écart qui isole la valeur
+        ajoutée. Le rapport publie aujourd'hui le taux de sortie~; le taux d'entrée demande de
+        calculer la même règle sur le fichier brut, ce qui est direct mais pas fait~;
+  \item la \textbf{précision des corrections automatiques}, mesurable gratuitement par la file de
+        revue~: quelle part des propositions un humain aurait-il contredites~? Les décisions
+        humaines sont déjà tracées avec leur auteur, la mesure consiste à les comparer aux
+        propositions.
+\end{itemize}
+
+Un indicateur qui existe déjà et qui vaut d'être suivi~: le \textbf{nombre de décisions humaines par
+fichier}, qui doit baisser d'un dépôt à l'autre si la boucle d'apprentissage fonctionne. Une
+décision de TVA validée devient une règle apprise pour la catégorie concernée, et la question n'est
+plus posée au dépôt suivant.
+
+\begin{notebox}
+\textbf{Une règle de travail qui a rapporté plus que les autres.} Exposer le coût dans les journaux
+et le regarder. Trois défauts de ce pipeline ont été trouvés par un compteur, jamais par une
+relecture~: un cache DNS que la concurrence rendait inopérant, un repli \code{HEAD}$\to$\code{GET}
+payé sur chaque URL, et un cache LLM dont la clé portait sur le lot de 25 libellés au lieu du
+libellé, ce qui faisait repayer l'intégralité du catalogue au dépôt suivant. Un cache dont on
+n'observe pas le taux de succès est un cache dont on ne sait pas s'il existe.
+\end{notebox}
+
+% =================== ANNEXE B ===================
+\newpage
+\section*{Annexe B. Mes choix d'outils, et pourquoi pas les alternatives}
+
+Je choisis une stack que deux personnes peuvent faire tourner et faire évoluer~: Python et Polars
+pour le traitement en mémoire, des contrôles écrits à la main comme fonctions pures typées,
+RapidFuzz pour la similarité textuelle, un LLM appelé via API avec cache, PostgreSQL comme
+référentiel avec journal d'audit, et une commande en ligne déclenchée par un \emph{timer} système
+pour l'orchestration. Chaque choix écarte une alternative, et je préfère l'assumer noir sur blanc.
+
+\renewcommand{\arraystretch}{1.22}%
+\noindent\small\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash\bfseries}p{3.0cm} >{\raggedright\arraybackslash}p{3.2cm} X@{}}
+\toprule
+\textbf{Mon choix} & \textbf{Alternative écartée} & \textbf{Pourquoi} \\
+\midrule
+Polars & Spark~; pandas & Même à cent magasins, le volume unitaire reste des fichiers de quelques dizaines de milliers de lignes~: ça tient en mémoire, et 10\,000 lignes se traitent en environ 2~secondes. Spark ajouterait un cluster à opérer et de la latence, pour zéro gain à cette échelle. Je reverrais ce choix au-delà du milliard de lignes, pas avant. \\
+Contrôles écrits à la main & Great Expectations & Chaque contrôle est une fonction pure, typée, testée isolément, qui retourne ses anomalies et ses corrections avec leur justification. Une bibliothèque de validation déclarative sait dire \gui{cette colonne viole une attente}~; elle ne sait pas dire \gui{ce code redevient valide si on retire les zéros de tête, donc je le corrige et je le trace}. C'est cette nuance qui fait tout le travail ici. \\
+Timer système + commande en ligne & Prefect~; Airflow~; n8n & Un seul pipeline, un seul serveur~: un ordonnanceur serait un système de plus à opérer pour une tâche que \code{systemd} déclenche déjà, avec journaux et redémarrage. Airflow se justifie avec des dizaines de pipelines et une équipe data dédiée. n8n est très bien pour collecter les fichiers et déclencher les traitements, mais le c\oe{}ur métier doit rester du code~: versionné, testé, relu. Une règle de TVA dans un outil low-code, personne ne la relit. \\
+RapidFuzz seul & Embeddings + base vectorielle & C'était mon intention de départ. Deux faits l'ont écartée. Le LLM voit déjà chaque libellé distinct exactement une fois et produit un libellé développé~; c'est lui qui rapproche \gui{DOLIP 1G CPR} de \gui{DOLIPRANE 1 G}, et le rapprochement flou opère ensuite sur ce texte-là. Et installer \code{sentence-transformers} tire \code{torch}, \code{transformers} et \code{triton} sur un serveur de 3,8~Go partagé avec deux autres sites, quand RapidFuzz occupe 12~Mo. La bonne raison de ne pas ajouter une brique, c'est qu'une autre fait déjà le travail. \\
+LLM via API + cache par libellé & Fine-tuning d'un modèle & Le volume de cas uniques est faible et le domaine bouge, avec de nouveaux produits chaque semaine. Un prompt solide avec sortie contrainte par schéma et taxonomie fournie suffit, pour un coût marginal quasi nul grâce au cache. Le fine-tuning coûterait plus qu'il ne rapporte et figerait le comportement. \\
+Blocking puis similarité & Comparaison exhaustive & La comparaison porte sur les fiches issues de la déduplication, pas sur les lignes~: 273~fiches deux à deux, c'est 37\,128 paires. Le blocking par catégorie feuille et contenance normalisée les ramène à 2\,507 comparaisons utiles, et garde la déduplication praticable quand le nombre de magasins monte. \\
+PostgreSQL & Base vectorielle dédiée~; entrepôt & Le référentiel, l'audit trail, le cache LLM et les vecteurs éventuels tiennent au même endroit, avec les jointures et les transactions. L'extension \code{pgvector} est installée et prête~; aucune colonne vectorielle n'est utilisée aujourd'hui, pour la raison exposée plus haut. Elle attend, elle ne coûte rien. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{4pt}
+{\color{soft}\small Fil conducteur~: aucun système de plus à opérer tant que le volume ne l'exige
+pas, le c\oe{}ur métier toujours en code versionné et testé, et chaque décision d'architecture
+adossée à une mesure plutôt qu'à une habitude.}
+
+% =================== ANNEXE C ===================
+\newpage
+\section*{Annexe C. Ce qui tourne réellement}
+
+Les annexes précédentes décrivent des choix. Celle-ci décrit l'état livré, chiffré, pour qu'on
+puisse le vérifier plutôt que le croire.
+
+\subsection{Le projet en chiffres}
+
+\renewcommand{\arraystretch}{1.2}
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{2.4cm} X@{}}
+\toprule
+\textbf{Partie} & \textbf{Volume} & \textbf{Contenu} \\
+\midrule
+Moteur de pipeline & 3\,689 lignes & 8 étapes, chacune une fonction pure du \emph{DataFrame} \\
+API & 2\,521 lignes & 30 routes HTTP, authentification, exécution en tâche de fond \\
+Base & 1\,279 lignes & 15 tables, 5 migrations \\
+Interface web & 4\,033 lignes & 5 pages, graphiques écrits à la main \\
+Tests & 3\,265 lignes & \textbf{208 tests}, dont la totalité du fichier de 10\,000 lignes \\
+\bottomrule
+\end{tabularx}
+
+\vspace{4pt}
+Le rapport tests/code est d'environ 1 pour 3,5. Ce n'est pas une coquetterie. Les défauts
+suivants ont tous été trouvés par un compteur, un test ou une mesure, aucun par une relecture du
+code~: un cache DNS que la concurrence rendait inopérant, un repli \code{HEAD}$\rightarrow$\code{GET}
+payé sur chaque URL, un cache LLM dont la clé portait sur le lot au lieu du libellé, un
+regroupement qui séparait \gui{1 L} de \gui{100CL}, un libellé enrichi calculé puis jeté avant le
+catalogue, et une réparation d'encodage qui créait une catégorie inexistante.
+
+\subsection{Les huit étapes du moteur}
+\begin{enumerate}
+  \item \code{ingest}~: encodage, BOM, mojibake, suffixes marketing collés~;
+  \item \code{field\_checks}~: EAN (clé de contrôle), URL, TVA, taxonomie~;
+  \item \code{cross\_checks}~: cohérence entre champs, comblement des trous~;
+  \item \code{llm\_enrich}~: libellés distincts uniquement, jamais les lignes~;
+  \item \code{dedup}~: regroupement et règles de survivorship~;
+  \item \code{entity\_resolution}~: quasi-doublons, blocking par contenance normalisée~;
+  \item \code{scoring\_routing}~: statut et seuils par champ~;
+  \item \code{report}~: qualité, garde-fou de quarantaine.
+\end{enumerate}
+
+Chacune reçoit un \emph{DataFrame} et rend un \emph{DataFrame}, ses corrections, ses anomalies et
+ses compteurs. Aucune n'écrit en base~: c'est l'appelant qui persiste. C'est ce qui les rend
+testables isolément et rejouables sans effet de bord.
+
+\subsection{La pile, et le rôle de chaque brique}
+
+\renewcommand{\arraystretch}{1.24}
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash\bfseries}p{3.4cm} X@{}}
+\toprule
+\textbf{Brique} & \textbf{Ce qu'elle fait ici} \\
+\midrule
+Python 3.12 & Le socle. Typé strictement, vérifié par \code{mypy} en mode \emph{strict} sur le moteur. \\
+Polars & Lecture et manipulation du CSV. Choisi pour la vitesse et l'API colonnaire~; 10\,000 lignes en environ 2~secondes hors réseau. \\
+ftfy & Réparation du \emph{mojibake} à l'ingestion. 118 lignes sur le fichier fourni. \\
+RapidFuzz & Similarité textuelle des quasi-doublons, sur le libellé enrichi par le LLM. \\
+Pydantic v2 & Contrats d'entrée/sortie de l'API et configuration typée. \\
+FastAPI + Uvicorn & 30 routes, exécution des traitements en tâche de fond, flux d'événements SSE pour la progression en direct. \\
+SQLAlchemy 2 (async) & Accès base, en asynchrone de bout en bout avec \code{asyncpg}. \\
+Alembic & Migrations. Introduit sur une base qui existait déjà, en l'adoptant plutôt qu'en la recréant. \\
+PostgreSQL 16 & Référentiel, journal d'audit, cache LLM, comptabilité de dépense. \\
+SDK Anthropic & Appel du LLM, sortie contrainte par schéma JSON, mode différé à moitié prix. \\
+structlog & Journaux structurés. C'est par eux que les trois défauts de performance ont été trouvés. \\
+Typer & La commande \code{pipeline run}, déclenchée par un \emph{timer} système. \\
+React 18 + TypeScript & Interface de revue. 3 dépendances de production, pas de bibliothèque de composants ni de graphiques. \\
+Vite + Tailwind 4 & Construction et styles. Paquet final~: 77~ko compressés. \\
+Docker Compose & Trois conteneurs (\code{api}, \code{web}, \code{postgres}), un volume, un réseau isolé. \\
+GitHub Actions & Intégration continue (\code{ruff}, \code{mypy}, 208 tests, run sur le fichier réel) et déploiement par image. \\
+nginx (hôte) & Reverse proxy et TLS, sur un serveur qui héberge déjà deux autres sites. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Ce que l'intégration continue vérifie, à chaque commit}
+\begin{itemize}
+  \item \code{ruff} en lint \emph{et} en format, \code{mypy} strict sur le moteur~;
+  \item les 208 tests~;
+  \item le pipeline complet sur les 10\,000 lignes, hors réseau, avec comparaison des compteurs aux
+        valeurs de profilage~: si le pipeline dérive, la CI le voit au commit~;
+  \item \textbf{les chiffres publiés dans le document de réponse}, extraits du source \LaTeX{} et
+        recalculés depuis le fichier. Le document et le code ne peuvent structurellement plus se
+        contredire~;
+  \item la syntaxe des scripts de déploiement, et les vhosts nginx validés dans un conteneur à la
+        version exacte du serveur (1.18), parce qu'une directive acceptée en 1.25 le fait planter.
+\end{itemize}
+
+Le déploiement refuse en outre de partir si l'intégration continue du commit n'est pas verte.
+
+% =================== ANNEXE D ===================
+\newpage
+\section*{Annexe D. Ce qui reste à faire}
+
+Rien de ce qui suit n'est branché. C'est une liste de travail, ordonnée par ce qu'elle rapporte,
+avec la mesure quand elle existe. Les trois premières lignes sont celles que je ferais en premier.
+
+\subsection{Coût}
+
+\textbf{1. Alléger le schéma de sortie du LLM.} La sortie représente \textbf{95~\%} de la facture
+(0,58~\$ sur 0,61~\$ sur un run mesuré). Or 75~\% des caractères produits sont du remplissage~:
+les noms de champs réécrits à chaque produit, le chemin de taxonomie recopié en entier alors qu'il
+est déjà dans l'en-tête mis en cache, et le libellé d'entrée réécho. Des clés courtes et un index
+de taxonomie ramènent un item de 232 à 91 caractères, à information identique. Gain attendu~:
+environ \textbf{$-$60~\%} sur chaque libellé non servi par le cache.
+
+\textbf{2. Chiffrer avec \code{count\_tokens}.} L'estimation avant lancement approxime encore à
+\gui{quatre caractères par jeton}, soit $\pm$25~\%. L'API expose un comptage exact, gratuit. Ça ne
+réduit pas la facture, ça rend l'annonce honnête.
+
+\textbf{3. Mesurer un modèle moins cher plutôt que d'en débattre.} Haiku coûte 5 fois moins
+qu'Opus. La question n'est pas le prix mais le taux d'\emph{erreur confiante}~: combien de fois le
+petit modèle est sûr de lui et se trompe, puisque c'est ce cas-là qui ne sera jamais relu et qui
+alimente ensuite la fusion. Les réponses d'Opus sur les libellés du fichier sont déjà en cache~;
+rejouer les mêmes sur Haiku coûte environ \textbf{0,12~\$} et donne le chiffre. Sous 1~\% de
+désaccord confiant, l'arbitrage est évident~; à 10~\%, il l'est aussi, dans l'autre sens.
+
+\subsection{Sécurité et exploitation}
+
+\textbf{4. Imposer le cloisonnement multi-clients.} Aujourd'hui, chaque donnée porte son magasin,
+mais tout utilisateur authentifié peut consulter le catalogue de tous les magasins~: le filtre est
+un confort d'affichage, pas une frontière. Rattacher chaque compte à un périmètre et l'appliquer
+côté serveur sur chaque requête est un \textbf{prérequis avant d'héberger deux clients distincts}.
+C'est la seule ligne de cette annexe qui bloque une mise en production réelle.
+
+\textbf{5. Reprendre un traitement là où il s'est arrêté.} L'état de chaque étape est déjà
+persisté, donc on sait où la panne a eu lieu~; la reprise, elle, n'est pas branchée et un run
+interrompu repart du début. Le coût est faible sur ce volume, il ne le sera plus à un million de
+lignes.
+
+\textbf{6. Chiffrer le volume de base au repos.} Le transit l'est déjà, TLS de bout en bout. Le
+repos dépend de l'hébergement retenu.
+
+\textbf{7. Reprendre automatiquement un échec de registre au déploiement.} Un \code{docker pull}
+a été refusé une fois, sans cause identifiée, et le second essai est passé sans rien changer. Un
+échec transitoire ne doit pas demander une intervention humaine.
+
+\subsection{Qualité et mesure}
+
+\textbf{8. Publier le delta avant/après du taux publiable.} Un taux absolu mélange la qualité de
+la source, qu'on ne contrôle pas, et l'apport du pipeline. C'est l'écart qui isole la valeur
+ajoutée. Le taux de sortie est déjà calculé~; le taux d'entrée demande d'appliquer la même règle au
+fichier brut.
+
+\textbf{9. Mesurer la précision des corrections automatiques.} La file de revue en donne le moyen
+gratuitement~: quelle part des propositions un humain a-t-il contredites~? Les décisions sont déjà
+tracées avec leur auteur, il reste à les comparer aux propositions.
+
+\textbf{10. Étiqueter un jeu de vraies paires.} Mesurer la part des vrais doublons qu'un
+rapprochement purement textuel manque suppose de savoir lesquels sont vrais, donc un jeu de paires
+validées à la main. Il n'existe pas. J'avais avancé un pourcentage dans une version précédente~;
+je l'ai retiré, faute de pouvoir le reproduire. Le prendre pour argent comptant aurait été
+d'autant plus trompeur qu'il servait à justifier un choix d'architecture. Les seules mesures
+possibles sans ce jeu sont circulaires~: elles ne peuvent evaluer que les paires que le pipeline
+trouve deja.
+
+\subsection{Volume}
+
+\textbf{11. Répartir les traitements sur plusieurs workers.} Le pipeline est déjà une fonction pure
+du fichier~; ce qui manque, c'est de sortir la file d'exécution du processus de l'API.
+
+\textbf{12. Traiter les gros fichiers en flux.} Le mode \emph{streaming} de Polars traiterait les
+données par morceaux~; la déduplication resterait possible parce que le \emph{blocking} la découpe
+déjà en groupes indépendants.
+
+\textbf{13. Brancher les référentiels externes le jour où les codes-barres sont réels.} Testé sur
+le fichier fourni avant d'être implémenté~: sur six EAN valides tirés du fichier, cinq sont
+inconnus d'Open Food Facts et le sixième est une \emph{fausse} correspondance (le code vaut
+\gui{TOMATES GRAPPE} dans le fichier et \gui{Guimauve Chocolat Lait} dans la base). Sur des codes
+synthétiques, ce croisement ne trouve donc presque rien, et signale une ligne correcte comme
+anomalie dans le cas où il trouve quelque chose. Utile en production, nuisible ici~: je préfère un pipeline qui ne fait pas semblant.
+
+\vspace{6pt}
+{\color{soft}\small Aucune de ces lignes n'est un regret. Ce sont des arbitrages de priorité, et
+ils sont écrits pour que le prochain à toucher ce code sache ce qui a été décidé, ce qui a été
+mesuré, et ce qui attend.}
+
+\end{document}

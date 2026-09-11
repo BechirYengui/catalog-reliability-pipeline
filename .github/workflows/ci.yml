@@ -1,0 +1,178 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint & tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Install Python 3.12
+        run: uv python install 3.12
+
+      # Volontairement SANS --all-extras : l'extra `entity` tire torch (~800 Mo),
+      # qui n'est utile qu'a la phase 2. L'installer ici ajouterait plusieurs
+      # minutes a chaque run pour rien.
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Ruff (lint)
+        run: uv run ruff check --output-format=github .
+
+      - name: Ruff (format)
+        run: uv run ruff format --check .
+
+      - name: Mypy (strict)
+        run: uv run mypy
+
+      - name: Tests
+        run: uv run pytest -v
+
+      # Le run de bout en bout est en --no-network : le CI ne doit dependre
+      # d'aucun service tiers. picsum.photos peut tomber, ca ne doit pas rendre
+      # notre pipeline rouge.
+      - name: Run pipeline on the real sample (offline)
+        run: |
+          uv run pipeline run data/samples/store_listing_produit.csv \
+            --store-id ci --no-network --output /tmp/report.json
+
+      - name: Check the report against the profiled figures
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          report = json.load(open("/tmp/report.json"))
+          errors = []
+
+          def expect(label, actual, expected, tolerance=0):
+              lo, hi = expected - tolerance, expected + tolerance
+              if not (lo <= actual <= hi):
+                  errors.append(f"{label}: {actual} hors de [{lo}, {hi}]")
+
+          # Chiffres mesures dans docs/profiling.md. Si le pipeline derive,
+          # le CI le voit ici et pas trois semaines plus tard en production.
+          expect("lignes traitees", report["rows_out"], 10000)
+          expect("run en quarantaine", int(report["quarantined"]), 0)
+
+          codes = report["anomalies_by_code"]
+          # Chiffres mesures dans docs/profiling.md. Si le pipeline derive, le
+          # CI le voit ici et pas trois semaines plus tard en production.
+          expect("ean_missing", codes.get("ean_missing", 0), 1300)
+          expect("ean_padded", codes.get("ean_padded", 0), 386)
+          expect("ean_unpadded", codes.get("ean_unpadded", 0), 331)
+          # GTIN-14 : le carton, pas l'unite vendue. Checksum valide, signale,
+          # jamais converti — deduire le GTIN-13 demanderait d'inventer un
+          # chiffre de controle.
+          expect("ean_gtin14", codes.get("ean_gtin14", 0), 1208)
+          expect("ean_not_a_gtin", codes.get("ean_not_a_gtin", 0), 133)
+          # Prefixe GS1 reserve a l'usage interne : ces codes ont un checksum
+          # valide mais ne sont PAS des identifiants produit universels.
+          expect("ean_internal_gs1", codes.get("ean_internal_gs1", 0), 1438)
+          expect("mojibake_fixed", codes.get("mojibake_fixed", 0), 118)
+          expect("marketing_suffix_detached", codes.get("marketing_suffix_detached", 0), 153)
+          expect("url_missing", codes.get("url_missing", 0), 800)
+          expect("url_scheme_repaired", codes.get("url_scheme_repaired", 0), 86)
+          expect("url_malformed", codes.get("url_malformed", 0), 78)
+          expect("taxonomy_gap", codes.get("taxonomy_gap", 0), 250)
+          expect("taxonomy_gap_filled", codes.get("taxonomy_gap_filled", 0), 250)
+          expect("taxonomy_incomplete", codes.get("taxonomy_incomplete", 0), 400)
+          # Apres canonicalisation, plus aucun chemin de taxonomie inconnu.
+          expect("taxonomy_unknown_path", codes.get("taxonomy_unknown_path", 0), 0)
+          # Le controle croise est le SEUL a detecter une TVA fausse : les
+          # quatre taux du fichier sont tous legaux.
+          expect("vat_category_mismatch", codes.get("vat_category_mismatch", 0), 394)
+          expect("vat_illegal_rate", codes.get("vat_illegal_rate", 0), 0)
+          # 1 428 = 1 346 + les 82 GTIN-14 canonises en 13 chiffres : retirer un
+          # zero de rembourrage change la valeur, donc c'est une correction, et
+          # elle doit apparaitre dans l'audit trail comme les autres.
+          expect("corrections RULE", report["corrections_by_author"].get("RULE", 0), 1428)
+
+          if errors:
+              print("Ecarts par rapport au profilage de reference :")
+              for e in errors:
+                  print("  -", e)
+              print("\nRapport complet :")
+              print(json.dumps(report, indent=2, ensure_ascii=False)[:4000])
+              sys.exit(1)
+          print("Rapport conforme au profilage de reference.")
+          print(json.dumps(codes, indent=2, ensure_ascii=False))
+          PY
+
+      # Le script de deploiement ne s'execute que sur le VPS : une faute de
+      # syntaxe ne se voit qu'apres avoir touche le serveur. Trois deploiements
+      # ont echoue ainsi (heredoc indente par le bloc YAML). On la detecte ici.
+      - name: Validate the deploy script syntax
+        run: |
+          python3 - <<'PY'
+          import subprocess, sys, tempfile, yaml
+
+          workflow = yaml.safe_load(open(".github/workflows/deploy.yml"))
+          failures = []
+          for job_name, job in workflow["jobs"].items():
+              for step in job.get("steps", []):
+                  script = (step.get("with") or {}).get("script")
+                  if not script:
+                      continue
+                  with tempfile.NamedTemporaryFile("w", suffix=".sh") as fh:
+                      fh.write(script)
+                      fh.flush()
+                      result = subprocess.run(
+                          ["bash", "-n", fh.name], capture_output=True, text=True
+                      )
+                  label = f"{job_name} / {step.get('name', 'sans nom')}"
+                  if result.returncode != 0:
+                      failures.append(f"{label}\n{result.stderr}")
+                  else:
+                      print(f"OK  {label}")
+          if failures:
+              sys.exit("\n".join(failures))
+          PY
+
+      # Meme logique que ci-dessus : une erreur de vhost ne se voit que sur le
+      # serveur, et la sanction est lourde puisque nginx y sert deux sites en
+      # production. On valide contre la MEME version que le VPS (1.18) : la
+      # derniere version accepte `http2 on;`, que 1.18 refuse — c'est
+      # exactement l'erreur qui a fait echouer un deploiement.
+      - name: Validate the nginx vhosts against production's nginx version
+        run: |
+          set -e
+          mkdir -p certs
+          # nginx -t exige que les fichiers de certificat existent : on en
+          # fabrique un jetable, jamais utilise ailleurs.
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 \
+            -keyout certs/privkey.pem -out certs/fullchain.pem \
+            -subj "/CN=catalog.test" 2>/dev/null
+
+          for vhost in deploy/*.nginx; do
+            echo "--- $vhost"
+            docker run --rm \
+              -v "$PWD/$vhost:/etc/nginx/conf.d/vhost.conf:ro" \
+              -v "$PWD/certs:/etc/letsencrypt/live/catalog.example.com:ro" \
+              nginx:1.18-alpine \
+              sh -c "touch /etc/nginx/catalog.htpasswd && nginx -t"
+          done
+
+      - name: Upload the run report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-report
+          path: /tmp/report.json
+          if-no-files-found: ignore

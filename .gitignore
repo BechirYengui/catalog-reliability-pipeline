@@ -1,0 +1,54 @@
+# Secrets — rien de tout cela ne doit jamais partir sur GitHub
+.env
+.env.*
+!.env.example
+*.pem
+*_rsa
+*_ed25519
+secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Node / front
+node_modules/
+web/dist/
+.vite/
+
+# Artefacts de run : sorties du pipeline, jamais versionnees
+data/runs/
+data/processed/
+data/quarantine/
+*.log
+
+# Cache du modele d'embeddings (~500 Mo, se retelecharge)
+.cache/
+models/
+
+# Local
+.DS_Store
+.idea/
+.vscode/
+/tmp/
+
+# Certificats jetables generes par le CI pour valider les vhosts nginx
+certs/
+web/tsconfig.tsbuildinfo
+
+# Sorties LaTeX : les documents se recompilent, ils ne se versionnent pas.
+# Le PDF de la reponse est une exception assumee, il est suivi explicitement.
+exercice/*.aux
+exercice/*.out
+exercice/*.fls
+exercice/*.fdb_latexmk
+exercice/*.synctex.gz
+exercice/ULTY_Annexes_Techniques.pdf

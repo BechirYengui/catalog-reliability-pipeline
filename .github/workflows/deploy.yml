@@ -1,0 +1,404 @@
+name: Deploy to VPS
+
+# DECLENCHEMENT MANUEL UNIQUEMENT, volontairement.
+#
+# Les autres sites du serveur deploient a chaque push sur main. Ici, tant que le stack
+# n'a pas tourne plusieurs fois sur un serveur qui heberge deja deux sites en
+# production, un push malencontreux ne doit pas pouvoir toucher le VPS.
+# Pour passer en automatique le jour venu, decommenter le bloc `push` ci-dessous.
+on:
+  workflow_dispatch:
+    inputs:
+      smoke_test:
+        description: "Lancer le pipeline sur l'echantillon apres deploiement"
+        type: boolean
+        default: true
+  # push:
+  #   branches: [main]
+
+concurrency:
+  group: deploy-catalog
+  cancel-in-progress: false # ne jamais interrompre un deploiement en cours
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    name: Build & push image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+      # Lire la conclusion du CI de ce commit. Sans ce droit, l'appel repond
+      # 403 et le garde-fou bloque tout, y compris un commit vert.
+      actions: read
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Le declenchement est manuel, donc rien n'empechait de deployer un
+      # commit dont le CI est rouge : c'est arrive. Le CI est ce qui verifie
+      # mypy strict, les tests et le run sur les 10 000 lignes ; deployer sans
+      # lui revient a ne pas les avoir ecrits.
+      - name: Refuse to deploy a commit whose CI is not green
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          conclusion=$(gh api \
+            "repos/${{ github.repository }}/actions/workflows/ci.yml/runs?head_sha=${{ github.sha }}&per_page=1" \
+            --jq '.workflow_runs[0].conclusion // "absent"')
+          echo "CI sur ${{ github.sha }} : $conclusion"
+          if [ "$conclusion" != "success" ]; then
+            echo "::error::Le CI de ce commit vaut '$conclusion'. Deploiement refuse."
+            echo "Attendez que le CI passe, ou corrigez-le avant de redeployer." >&2
+            exit 1
+          fi
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image reference
+        id: meta
+        run: |
+          # GHCR exige un nom d'image en minuscules ; le nom du depot ne l'est pas.
+          repo_lc=$(echo "${IMAGE_NAME}" | tr '[:upper:]' '[:lower:]')
+          echo "image=${REGISTRY}/${repo_lc}" >> "$GITHUB_OUTPUT"
+          echo "repo_lc=${repo_lc}" >> "$GITHUB_OUTPUT"
+
+      # Le build se fait ICI et pas sur le VPS : 2 vCPU partages avec deux sites
+      # en production, et une image qui pesera ~2 Go a la phase 2 (torch).
+      # Le serveur ne fait qu'un `docker pull`.
+      - name: Build and push the API/pipeline image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image }}:main
+            ${{ steps.meta.outputs.image }}:${{ github.sha }}
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
+          provenance: false
+
+      - name: Build and push the web image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./web
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image }}-web:main
+            ${{ steps.meta.outputs.image }}-web:${{ github.sha }}
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
+          provenance: false
+
+      - name: Verify no secret leaked into the image
+        run: |
+          # Un .env glisse dans un layer y reste meme si un layer suivant le
+          # supprime. On verifie l'historique de build ET le contenu.
+          image="${{ steps.meta.outputs.image }}:${{ github.sha }}"
+          docker pull -q "$image"
+          if docker history --no-trunc "$image" | grep -qiE 'ANTHROPIC_API_KEY=|POSTGRES_PASSWORD=[^$]'; then
+            echo "::error::un secret apparait dans l'historique de l'image"
+            exit 1
+          fi
+          if docker run --rm --entrypoint sh "$image" -c 'ls -a /app | grep -x ".env"' 2>/dev/null; then
+            echo "::error::un fichier .env est present dans l'image"
+            exit 1
+          fi
+          echo "Aucun secret detecte dans l'image."
+
+  deploy:
+    name: Deploy on VPS
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Le VPS n'a PAS besoin des sources : l'image est deja construite et
+      # publiee. On ne lui envoie que le descriptif du stack. C'est la
+      # difference avec les autres sites du serveur, qui font un `git pull`
+      # sur le serveur parce qu'ils y construisent leurs images.
+      #
+      # Encode en base64 pour voyager dans UNE variable d'environnement, donc
+      # dans UNE seule session SSH. `scp-action` en ouvre plusieurs et le
+      # serveur est configure en `MaxSessions 2` : le transfert reussissait
+      # mais la connexion de nettoyage expirait, faisant echouer le job.
+      - name: Encode the compose file and host-level units
+        id: compose
+        run: |
+          # Une seule archive pour une seule session SSH : compose + scripts
+          # d'exploitation + units systemd + vhost nginx.
+          tar czf - docker-compose.prod.yml deploy/ | base64 -w0 > /tmp/payload.b64
+          echo "b64=$(cat /tmp/payload.b64)" >> "$GITHUB_OUTPUT"
+          echo "Charge utile : $(wc -c < /tmp/payload.b64) octets"
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1
+        env:
+          CATALOG_IMAGE: ${{ needs.build.outputs.image }}:${{ github.sha }}
+          CATALOG_WEB_IMAGE: ${{ needs.build.outputs.image }}-web:${{ github.sha }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Permet de changer de modele sans redeployer de code :
+          # `gh secret set LLM_MODEL` puis relancer le deploiement.
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          # Enveloppe cumulee de la demonstration, en dollars.
+          LLM_BUDGET_USD: ${{ secrets.LLM_BUDGET_USD }}
+          # Jeton ephemere, valable le temps du job : le VPS n'a donc aucun
+          # identifiant GHCR persistant a se faire voler.
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
+          SMOKE_TEST: ${{ inputs.smoke_test }}
+          COMPOSE_B64: ${{ steps.compose.outputs.b64 }}
+          CATALOG_WEB_PASSWORD: ${{ secrets.CATALOG_WEB_PASSWORD }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || '22' }}
+          command_timeout: 15m
+          envs: CATALOG_IMAGE,CATALOG_WEB_IMAGE,ADMIN_EMAIL,ADMIN_PASSWORD,SESSION_SECRET,POSTGRES_PASSWORD,ANTHROPIC_API_KEY,LLM_MODEL,LLM_BUDGET_USD,GHCR_TOKEN,GHCR_USER,SMOKE_TEST,COMPOSE_B64,CATALOG_WEB_PASSWORD
+          script: |
+            set -euo pipefail
+            APP_DIR=/srv/catalog
+
+            echo "==> Arborescence"
+            mkdir -p "$APP_DIR"/{inbox,sources,processed,quarantine,reports,backups}
+            # Le conteneur tourne en uid 1001 (non-root, cf. Dockerfile) : tous
+            # les repertoires qu'il ECRIT doivent lui appartenir. `inbox` en
+            # fait partie depuis que l'API y depose les fichiers televerses —
+            # il n'est plus en lecture seule.
+            chown -R 1001:1001 "$APP_DIR"/{inbox,sources,processed,quarantine,reports}
+            cd "$APP_DIR"
+
+            echo "==> Descriptif du stack et outillage d'exploitation"
+            echo "${COMPOSE_B64}" | base64 -d | tar xzf - -C "$APP_DIR"
+            install -m 755 "$APP_DIR/deploy/process-inbox.sh" "$APP_DIR/process-inbox.sh"
+            install -m 755 "$APP_DIR/deploy/render-index.sh"  "$APP_DIR/render-index.sh"
+
+            echo "==> Verification des secrets obligatoires"
+            # Ces deux-la ne peuvent pas manquer sans consequence. POSTGRES_PASSWORD
+            # est deja garde par le compose (`:?`) ; SESSION_SECRET ne l'etait par
+            # rien : un secret GitHub absent ecrivait `SESSION_SECRET=` dans le .env,
+            # l'API demarrait sur la cle de developpement publiee dans le depot, et
+            # n'importe qui pouvait signer un jeton admin. L'API refuse desormais de
+            # demarrer dans ce cas — on echoue ici, plus tot et avec un message clair,
+            # plutot que de decouvrir la panne au controle de sante.
+            for secret_requis in SESSION_SECRET POSTGRES_PASSWORD; do
+              if [ -z "$(eval echo \"\$$secret_requis\")" ]; then
+                echo "ERREUR : le secret GitHub ${secret_requis} est vide ou absent." >&2
+                echo "  Le poser dans Settings > Secrets and variables > Actions." >&2
+                echo "  Generer une valeur : openssl rand -hex 32" >&2
+                exit 1
+              fi
+            done
+
+            echo "==> Fichier de configuration (chmod 600, jamais versionne)"
+            # Sous-shell : sans lui, ce umask reste actif pour TOUT le reste du
+            # script. C'est ce qui a rendu index.html illisible par www-data
+            # (cree en 600), et donc l'interface en 403.
+            (
+            umask 077
+            cat > .env.new <<EOF
+            POSTGRES_USER=catalog
+            POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            POSTGRES_DB=catalog
+            POSTGRES_PORT=5433
+            DATABASE_URL=postgresql+asyncpg://catalog:${POSTGRES_PASSWORD}@postgres:5432/catalog
+            ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+            LLM_MODEL=${LLM_MODEL:-claude-opus-5}
+            LLM_MAX_CALLS_PER_RUN=500
+            LLM_MAX_COST_USD=5.0
+            LLM_BUDGET_USD=${LLM_BUDGET_USD:-5.0}
+            LOG_LEVEL=INFO
+            LOG_JSON=true
+            DATA_DIR=/data
+            CATALOG_IMAGE=${CATALOG_IMAGE}
+            CATALOG_WEB_IMAGE=${CATALOG_WEB_IMAGE}
+            ADMIN_EMAIL=${ADMIN_EMAIL}
+            ADMIN_PASSWORD=${ADMIN_PASSWORD}
+            SESSION_SECRET=${SESSION_SECRET}
+            EOF
+            chmod 600 .env.new
+            mv .env.new .env
+            )
+
+            echo "==> Recuperation de l'image (aucun build sur ce serveur)"
+            echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GHCR_USER}" --password-stdin
+            docker pull "${CATALOG_IMAGE}"
+            docker pull "${CATALOG_WEB_IMAGE}"
+
+            echo "==> Demarrage du stack"
+            docker compose -f docker-compose.prod.yml --env-file .env up -d postgres
+            for i in $(seq 1 30); do
+              if docker compose -f docker-compose.prod.yml exec -T postgres \
+                   pg_isready -U catalog -d catalog >/dev/null 2>&1; then
+                echo "postgres pret apres ${i}0s au plus"
+                break
+              fi
+              sleep 2
+            done
+            docker compose -f docker-compose.prod.yml exec -T postgres \
+              psql -U catalog -d catalog -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+
+            echo "==> Demarrage de l'API et de l'interface"
+            docker compose -f docker-compose.prod.yml --env-file .env up -d api web --remove-orphans
+
+            echo "==> Attente de l'API"
+            for i in $(seq 1 30); do
+              if curl -sf http://127.0.0.1:3300/api/health >/dev/null; then
+                echo "API prete"; break
+              fi
+              sleep 2
+            done
+            curl -sf http://127.0.0.1:3300/api/health || {
+              echo "::error::l'API ne repond pas"
+              docker compose -f docker-compose.prod.yml logs --tail 40 api
+              exit 1
+            }
+            curl -sf -o /dev/null http://127.0.0.1:3301/ || {
+              echo "::error::l'interface ne repond pas"
+              docker compose -f docker-compose.prod.yml logs --tail 20 web
+              exit 1
+            }
+            echo "Interface et API operationnelles."
+
+            echo "==> Verification du binaire deploye"
+            docker compose -f docker-compose.prod.yml --env-file .env \
+              run --rm --no-deps pipeline --help >/dev/null
+            echo "CLI operationnelle."
+
+            if [ "${SMOKE_TEST}" = "true" ] && [ -f "$APP_DIR/inbox/store_listing_produit.csv" ]; then
+              echo "==> Test de bout en bout sur l'echantillon"
+              docker compose -f docker-compose.prod.yml --env-file .env run --rm pipeline \
+                run /data/inbox/store_listing_produit.csv --store-id smoke --no-network \
+                --output /data/reports/smoke.json
+            fi
+
+            # Le rapport est relu depuis l'HOTE (volume partage) : pas besoin
+            # d'un second conteneur pour lire un fichier JSON.
+            #
+            # Heredoc NON INDENTE, delimiteur compris. Le bloc `script: |` du
+            # YAML ne retire que l'indentation COMMUNE ; toute espace ajoutee
+            # devant `PY` subsiste et bash ne reconnait plus la fin du heredoc
+            # (« syntax error: unexpected end of file »). Meme raison pour le
+            # corps : Python refuserait une indentation parasite.
+            if [ "${SMOKE_TEST}" = "true" ] && [ -f "$APP_DIR/reports/smoke.json" ]; then
+            python3 - <<'PY'
+            import json, sys
+
+            report = json.load(open("/srv/catalog/reports/smoke.json"))
+            print(f"lignes {report['rows_in']} -> {report['rows_out']}")
+            print(f"publiable {report['publishable_rate']:.1%}")
+            print("anomalies:", json.dumps(report["anomalies_by_code"], indent=2))
+            if report["rows_out"] != 10000 or report["quarantined"]:
+                sys.exit("le test de bout en bout ne donne pas le resultat attendu")
+            print("Test de bout en bout conforme.")
+            PY
+            fi
+
+            echo "==> Units systemd (traitement de l'inbox)"
+            install -m 644 "$APP_DIR/deploy/catalog-pipeline.service" /etc/systemd/system/
+            install -m 644 "$APP_DIR/deploy/catalog-pipeline.timer"   /etc/systemd/system/
+            systemctl daemon-reload
+            systemctl enable --now catalog-pipeline.timer
+            systemctl list-timers catalog-pipeline.timer --no-pager | head -3
+
+            echo "==> Vhost nginx de consultation des rapports"
+            # L'authentification protege des donnees catalogue exposees sur
+            # l'internet public. openssl plutot que htpasswd : apache2-utils
+            # n'est pas installe et ce n'est pas une raison pour l'ajouter.
+            if [ -n "${CATALOG_WEB_PASSWORD}" ]; then
+              printf 'catalog:%s\n' \
+                "$(openssl passwd -apr1 "${CATALOG_WEB_PASSWORD}")" \
+                > /etc/nginx/catalog.htpasswd
+              chmod 640 /etc/nginx/catalog.htpasswd
+              chown root:www-data /etc/nginx/catalog.htpasswd
+            fi
+
+            echo "==> Certificat TLS"
+            DOMAIN=catalog.example.com
+            # Le repertoire de challenge doit etre traversable par www-data.
+            # Cree en 700, il donne un 403 et la validation ACME echoue.
+            mkdir -p /var/www/html/.well-known/acme-challenge
+            chmod 755 /var/www/html/.well-known /var/www/html/.well-known/acme-challenge
+
+            if [ ! -s "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]; then
+              echo "pas de certificat : obtention"
+              command -v certbot >/dev/null || \
+                DEBIAN_FRONTEND=noninteractive apt-get install -y -qq certbot
+              # Un vhost HTTP minimal d'abord : sans lui, nginx ne sait pas
+              # servir le challenge pour ce nom d'hote et certbot echoue.
+              cat > /etc/nginx/sites-available/catalog.conf <<'NGINX'
+            server {
+                listen 80;
+                server_name catalog.example.com;
+                location ^~ /.well-known/acme-challenge/ { root /var/www/html; }
+                location / { return 503; }
+            }
+            NGINX
+              ln -sf /etc/nginx/sites-available/catalog.conf /etc/nginx/sites-enabled/catalog.conf
+              nginx -t && systemctl reload nginx
+              certbot certonly --webroot -w /var/www/html -d "$DOMAIN" \
+                --non-interactive --agree-tos --register-unsafely-without-email \
+                --key-type ecdsa \
+                --deploy-hook "systemctl reload nginx" || \
+                echo "::warning::certificat non obtenu — le vhost TLS ne se chargera pas"
+            else
+              echo "certificat present, expire le $(openssl x509 -enddate -noout \
+                -in /etc/letsencrypt/live/$DOMAIN/fullchain.pem | cut -d= -f2)"
+            fi
+            # Le renouvellement est porte par le timer certbot fourni par le
+            # paquet ; le deploy-hook ci-dessus recharge nginx apres coup.
+            systemctl enable --now certbot.timer 2>/dev/null || true
+
+            install -m 644 "$APP_DIR/deploy/catalog-platform.nginx" \
+              /etc/nginx/sites-available/catalog.conf
+            ln -sf /etc/nginx/sites-available/catalog.conf \
+              /etc/nginx/sites-enabled/catalog.conf
+
+            # GARDE-FOU : ce serveur sert deux autres sites en production.
+            # Un rechargement avec une config invalide les couperait. On teste
+            # d'abord, et on retire notre vhost plutot que de risquer ca.
+            if nginx -t 2>&1; then
+              systemctl reload nginx
+              echo "nginx recharge."
+            else
+              echo "::error::config nginx invalide — vhost catalog retire, nginx intact"
+              rm -f /etc/nginx/sites-enabled/catalog.conf
+              nginx -t
+              exit 1
+            fi
+
+            "$APP_DIR/render-index.sh" || true
+
+            echo "==> Deconnexion du registre et menage"
+            docker logout ghcr.io
+            # Le cache de build avait rempli le disque a 81% le 13/05 sur ce
+            # serveur. Ici on ne construit pas, mais les images tirees
+            # s'accumulent : on elague celles qui ne servent plus.
+            docker image prune -f
+            df -h / | tail -1
+
+            echo "Deploiement termine."

@@ -1,0 +1,40 @@
+# Regles de TVA.
+#
+# REGLE ABSOLUE, appliquee dans scoring_routing et testee explicitement :
+# la TVA n'est JAMAIS corrigee automatiquement, meme a confiance 1.0.
+# Une incoherence de TVA produit une anomalie + un statut NEEDS_REVIEW.
+# Raison : une TVA fausse a une consequence comptable et fiscale reelle ; le
+# cout d'une erreur automatique est sans commune mesure avec celui d'une
+# validation humaine de 3 secondes.
+#
+# Constat du fichier reel : les 4 taux presents sont TOUS legaux (5.5, 20, 2.1, 10).
+# Le controle syntaxique ne detecte donc rien — toute la valeur est ici,
+# dans le croisement categorie <-> taux.
+
+legal_rates_fr: [0.0, 2.1, 5.5, 10.0, 20.0]
+
+# Taux attendu par chemin de taxonomie (niveau 4).
+# `expected` = le taux normal ; `tolerated` = autres taux legitimes sans alerte.
+expected_by_category:
+  PARACETAMOL:      {expected: 2.1,  tolerated: [10.0]}   # medicament non rembourse : 10%
+  SPIRITUEUX:       {expected: 20.0, tolerated: []}
+  COLA:             {expected: 5.5,  tolerated: [10.0]}   # 10% si consommation immediate
+  TOMATES:          {expected: 5.5,  tolerated: []}
+  POMMES:           {expected: 5.5,  tolerated: []}
+  NOISETTE CACAO:   {expected: 5.5,  tolerated: []}
+  CAFE MOULU:       {expected: 5.5,  tolerated: []}
+  CREMES:           {expected: 5.5,  tolerated: []}
+  LIQUIDE:          {expected: 20.0, tolerated: []}
+  TAILLE 4:         {expected: 20.0, tolerated: []}
+
+# Familles detectees directement sur le libelle, independamment de la taxonomie.
+# Utile quand la taxonomie est elle-meme fausse : un WHISKY range dans POMMES
+# doit quand meme declencher l'alerte alcool.
+# Matching par TOKEN exact apres normalisation.
+keyword_families:
+  alcool:
+    expected: 20.0
+    tokens: [WHISKY, VODKA, RHUM, GIN, PASTIS, TEQUILA, COGNAC, BIERE, BIERES, VIN, CHAMPAGNE]
+  medicament:
+    expected: 2.1
+    tokens: [DOLIPRANE, DOLIP, DOLI, PARACETAMOL, IBUPROFENE, ASPIRINE]

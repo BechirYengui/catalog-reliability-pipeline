@@ -1,0 +1,156 @@
+# Stack de production, VPS.
+#
+# Contraintes reelles du serveur, qui expliquent chaque choix ci-dessous :
+# - il heberge deja deux autres sites ; un nginx HOTE occupe 80/443, donc
+#   aucun service d'ici ne publie sur ces ports ;
+# - 2 vCPU / 3,8 Go partages : les limites memoire sont explicites pour qu'un
+#   run de pipeline ne puisse pas etouffer les sites existants ;
+# - un postgres tourne deja pour un autre site : celui-ci est SEPARE, avec son
+#   propre volume et son propre reseau. Aucun partage, aucune interference.
+
+name: catalog
+
+# Journaux BORNES, sur les quatre services. Sans cette section, Docker garde
+# `json-file` sans limite : un conteneur relance en boucle par
+# `restart: unless-stopped` (une migration qui echoue, par exemple) ecrit une
+# trace complete plusieurs fois par minute, indefiniment.
+#
+# Ce n'est pas une precaution theorique. Le disque du VPS etait deja a 81 %, et
+# il est PARTAGE avec deux autres sites : un disque plein ne ferait pas
+# tomber le catalogue tout seul, il emporterait les deux sites existants. C'est
+# la seule chose que les consignes du projet interdisent absolument.
+#
+# 10 Mo x 3 fichiers x 4 services = 120 Mo au pire, contre l'infini aujourd'hui.
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: catalog-db
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-catalog}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}
+      POSTGRES_DB: ${POSTGRES_DB:-catalog}
+      # Accelere pg_dump/restore et le premier initdb sur un CPU modeste.
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+    volumes:
+      - catalog_pgdata:/var/lib/postgresql/data
+    # Publie UNIQUEMENT sur la boucle locale : accessible en tunnel SSH pour le
+    # debug, jamais depuis l'exterieur.
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-catalog} -d ${POSTGRES_DB:-catalog}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    networks:
+      - catalog
+
+  api:
+    image: ${CATALOG_IMAGE:-ghcr.io/bechiryengui/catalog-reliability-pipeline:main}
+    container_name: catalog-api
+    restart: unless-stopped
+    logging: *logging
+    command:
+      - uvicorn
+      - api.main:app
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8000"
+      # UN SEUL worker, deliberement. La diffusion de progression (SSE) passe
+      # par une file en memoire : avec plusieurs workers, un navigateur
+      # connecte au worker A ne recevrait pas les evenements d'un run execute
+      # par le worker B. Passer a plusieurs workers imposerait un bus externe.
+      - --workers
+      - "1"
+    env_file: .env
+    environment:
+      ROLE: api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - /srv/catalog/inbox:/data/inbox
+      # Les depots faits par l'interface : le balayage nocturne vide `inbox/`,
+      # il ne doit pas emporter les originaux dont les runs ont besoin.
+      - /srv/catalog/sources:/data/sources
+      - /srv/catalog/processed:/data/processed
+      - /srv/catalog/quarantine:/data/quarantine
+      - /srv/catalog/reports:/data/reports
+    # N'ecoute que sur la boucle locale : seul le nginx hote est expose.
+    ports:
+      - "127.0.0.1:3300:8000"
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+    networks:
+      - catalog
+
+  web:
+    image: ${CATALOG_WEB_IMAGE:-ghcr.io/bechiryengui/catalog-reliability-pipeline-web:main}
+    container_name: catalog-web
+    restart: unless-stopped
+    logging: *logging
+    ports:
+      - "127.0.0.1:3301:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    networks:
+      - catalog
+
+  # Service a la demande : lance par le systemd timer, pas maintenu en vie.
+  #   docker compose -f docker-compose.prod.yml run --rm pipeline run /data/inbox/x.csv
+  pipeline:
+    image: ${CATALOG_IMAGE:-ghcr.io/bechiryengui/catalog-reliability-pipeline:main}
+    container_name: catalog-pipeline
+    restart: "no"
+    logging: *logging
+    # L'image n'a pas d'ENTRYPOINT : elle sert a la fois l'API et le pipeline,
+    # et c'est le service qui choisit son role. Ici l'entrypoint rend les
+    # arguments naturels : `docker compose run pipeline run /data/x.csv`.
+    entrypoint: ["pipeline"]
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - /srv/catalog/inbox:/data/inbox
+      # Les depots faits par l'interface : le balayage nocturne vide `inbox/`,
+      # il ne doit pas emporter les originaux dont les runs ont besoin.
+      - /srv/catalog/sources:/data/sources
+      - /srv/catalog/processed:/data/processed
+      - /srv/catalog/quarantine:/data/quarantine
+      - /srv/catalog/reports:/data/reports
+    deploy:
+      resources:
+        limits:
+          # Le modele d'embeddings de la phase 2 tourne en CPU : cette borne
+          # garantit qu'un run ne peut pas faire tomber les autres sites par OOM.
+          memory: 1536M
+          cpus: "1.5"
+    networks:
+      - catalog
+
+volumes:
+  catalog_pgdata:
+    name: catalog_pgdata
+
+networks:
+  catalog:
+    name: catalog

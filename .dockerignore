@@ -1,0 +1,23 @@
+# Rien de tout cela n'a de raison d'entrer dans l'image — et surtout pas .env,
+# dont la presence dans un layer serait definitive meme apres suppression.
+.env
+.env.*
+*.pem
+.git
+.github
+.venv
+__pycache__
+*.pyc
+.mypy_cache
+.ruff_cache
+.pytest_cache
+node_modules
+web/dist
+tests
+docs
+scripts
+data
+*.md
+!README.md
+Makefile
+.claude

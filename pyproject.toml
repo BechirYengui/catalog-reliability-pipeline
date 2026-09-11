@@ -1,0 +1,88 @@
+[project]
+name = "catalog-pipeline"
+version = "0.1.0"
+description = "Pipeline de fiabilisation de catalogues produits CSV"
+readme = "README.md"
+# Bornee volontairement : le poste, le CI et l'image Docker doivent tourner sur
+# la MEME version. Sans borne haute, uv choisit la derniere disponible (3.14) et
+# on decouvre les ecarts en production.
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "polars>=1.17",
+    "pydantic[email]>=2.10",
+    "pydantic-settings>=2.7",
+    "ftfy>=6.3",
+    "httpx>=0.28",
+    "structlog>=24.4",
+    "typer>=0.15",
+    "pyyaml>=6.0",
+    "fastapi>=0.141.1",
+    "uvicorn[standard]>=0.52.1",
+    "sqlalchemy>=2.0.51",
+    "asyncpg>=0.31.0",
+    "aiosqlite>=0.22.1",
+    "python-multipart>=0.0.32",
+    "anthropic>=0.121.0",
+    "rapidfuzz>=3.14.5",
+    "alembic>=1.19.1",
+]
+
+[project.optional-dependencies]
+# Etage 2 : resolution d'entites (phase 2). Isole car torch pese ~800 Mo :
+# le conteneur de l'API n'en a pas besoin, seul celui du pipeline l'installe.
+entity = [
+    # Embeddings : NON installes par defaut. La mesure (docs/profiling.md) montre
+    # que le LLM, qui voit deja chaque libelle distinct une fois, comble le fosse
+    # semantique que les embeddings devaient combler. A reactiver le jour ou le
+    # volume de libellees inedits rend l'appel LLM plus cher qu'un modele local.
+    "sentence-transformers>=3.3",
+]
+
+[project.scripts]
+pipeline = "pipeline.cli:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "pytest-cov>=6.0",
+    "mypy>=1.14",
+    "ruff>=0.9",
+    "types-pyyaml>=6.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["pipeline"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+# scripts/ = profileurs jetables, stdlib pure, executables sans installer le
+# projet (`python3 scripts/profile_csv.py`). Ils sont versionnes pour que les
+# chiffres de docs/profiling.md soient reproductibles, pas pour etre maintenus
+# au meme standard que le moteur. Le typage et le lint stricts s'appliquent a
+# pipeline/, qui est le code qui tourne en production.
+exclude = ["scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4", "RUF"]
+ignore = ["RUF001", "RUF002", "RUF003"]  # les libelles produits contiennent des caracteres ambigus
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+files = ["pipeline"]
+
+[[tool.mypy.overrides]]
+module = ["ftfy.*", "polars.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-q --strict-markers"

@@ -1,0 +1,27 @@
+[Unit]
+Description=Traitement des catalogues deposes dans /srv/catalog/inbox
+Documentation=https://github.com/BechirYengui/catalog-reliability-pipeline
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/srv/catalog/process-inbox.sh
+WorkingDirectory=/srv/catalog
+
+# Le serveur heberge deux sites en production : un run de pipeline ne doit
+# jamais leur disputer le CPU. Le travail est batch, quelques minutes de plus
+# ne changent rien, une page lente si.
+Nice=10
+IOSchedulingClass=idle
+
+# Un run complet avec verification des 9 085 URLs prend ~4 min. La marge couvre
+# un fichier plus gros ou un reseau lent, sans permettre un blocage infini.
+TimeoutStartSec=30min
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=catalog-pipeline
+
+[Install]
+WantedBy=multi-user.target

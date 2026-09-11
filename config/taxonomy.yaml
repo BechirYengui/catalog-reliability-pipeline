@@ -1,0 +1,39 @@
+# Referentiel de taxonomie — liste FERMEE.
+#
+# Extrait du fichier reel (scripts/profile_deep.py, section C) : ce sont les 10
+# seuls chemins complets observes sur 10 000 lignes. Les 3 chemins supplementaires
+# vus dans le CSV brut (« Ã‰PICERIE SUCREE », « CRÃˆMERIE ») sont du mojibake et
+# disparaissent apres l'etape ingest — ils ne sont donc PAS dans ce referentiel.
+#
+# Ce fichier sert a trois choses :
+#  1. valider qu'un chemin observe existe bien (sinon TAXONOMY_UNKNOWN_PATH) ;
+#  2. combler les trous « n2 vide alors que n3/n4 sont remplis » (250 lignes) ;
+#  3. etre injecte dans le prompt LLM comme liste de choix — le modele choisit
+#     dans cette liste, il n'invente jamais une categorie.
+
+paths:
+  - [SANTE, MEDICAMENTS, ANTALGIQUES, PARACETAMOL]
+  - [ALIMENTAIRE, BOISSONS, ALCOOLS, SPIRITUEUX]
+  - [ALIMENTAIRE, BOISSONS, SODAS, COLA]
+  - [ALIMENTAIRE, FRUITS ET LEGUMES, LEGUMES, TOMATES]
+  - [ALIMENTAIRE, FRUITS ET LEGUMES, FRUITS, POMMES]
+  - [ALIMENTAIRE, EPICERIE SUCREE, PATES A TARTINER, NOISETTE CACAO]
+  - [ALIMENTAIRE, EPICERIE SUCREE, CAFE THE, CAFE MOULU]
+  - [ALIMENTAIRE, PRODUITS FRAIS, CREMERIE, CREMES]
+  - [NON ALIMENTAIRE, ENTRETIEN, LESSIVE, LIQUIDE]
+  - [NON ALIMENTAIRE, BEBE, COUCHES, TAILLE 4]
+
+# Mots-cles permettant de rattacher un libelle a un chemin sans LLM.
+# Matching par TOKEN apres normalisation, jamais par sous-chaine (cf. le piege
+# « GIN » contenu dans « FRORIGINE », documente dans docs/profiling.md §7).
+keywords:
+  PARACETAMOL: [DOLIPRANE, DOLIP, DOLI, PARACETAMOL, CPR]
+  SPIRITUEUX: [WHISKY, VODKA, RHUM, GIN, PASTIS, TEQUILA, COGNAC]
+  COLA: [COCA, COLA]
+  TOMATES: [TOMATE, TOMATES, TOM, GRAPPE, GRA]
+  POMMES: [POMME, POMMES, POM, GALA]
+  NOISETTE CACAO: [NUTELLA, NUTELA, TARTINER, TART]
+  CAFE MOULU: [CAFE, ARABICA, MOULU, MLU]
+  CREMES: [CREME, CREMES, FRAICHE]
+  LIQUIDE: [LESSIVE, LESS]
+  TAILLE 4: [COUCHES, PAMPERS, PAMP]

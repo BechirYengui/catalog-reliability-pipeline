@@ -1,0 +1,22 @@
+# Suffixes marketing colles au libelle caisse.
+#
+# Mesure sur le fichier reel : 153 lignes concernees (79 « ORIGINE ITALIA »,
+# 74 « FAMILY SIZE »). Exemples :
+#   'LESSIVE 2LORIGINE ITALIA'     -> 'LESSIVE 2L'        + origine = ITALIA
+#   'COCA COLA ZERO 1LFAMILY SIZE' -> 'COCA COLA ZERO 1L' + mention = FAMILY SIZE
+#   'TOMATES GRAPPEFAMILY SIZE'    -> 'TOMATES GRAPPE'    + mention = FAMILY SIZE
+#
+# Volontairement une LISTE FERMEE et non une heuristique de casse : une
+# heuristique du type « minuscule collee a une majuscule » decouperait aussi
+# des libelles legitimes. Ajouter un suffixe ici est un acte explicite.
+#
+# Le suffixe detache n'est pas jete : il part dans une colonne dediee, c'est
+# de l'information commerciale exploitable en aval.
+
+suffixes:
+  - value: "ORIGINE ITALIA"
+    target_field: origin
+    extracted_value: "ITALIA"
+  - value: "FAMILY SIZE"
+    target_field: marketing_mention
+    extracted_value: "FAMILY SIZE"

@@ -1,0 +1,301 @@
+﻿id_produit,ean,nom,url_image,taxonomie_niveau_1,taxonomie_niveau_2,taxonomie_niveau_3,taxonomie_niveau_4,tva
+7f8646de-df30-49d3-a721-8992e5961ae7,,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+a85a464e-c32b-4d92-952a-d892ec0d0eaf,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+e3b03152-4dfd-4d81-bf43-ce2a9f2c92a7,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+ad90d0d9-0c0a-4360-a347-ffa327e1a49e,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+52f9da9b-bcdd-47f0-9532-463dfc73e269,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+b2af6c82-ae18-41f6-a140-00bc4c3ea6e8,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+d30b7adf-de23-47de-b231-7dc7720d08e5,,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+55d17555-cf64-4549-891b-770d8448b63a,3760002000077,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-7/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+f9159169-3c74-4710-b0ee-90f1c5b028d8,3760002000084,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-8/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+c83107f1-5bf5-40d7-a58e-65f7884e0890,3760002000091,DOLIPRANE 1 G,https://picsum.photos/seed/x-9/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+28a6ddad-5262-4bca-8d62-229bf0717b57,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+09674fe0-65a8-4b23-bd33-0caaa74c7440,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+f192c13d-9569-4e2c-b2ca-607b8385b277,,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+65face9b-997e-49e7-9edf-b2d924b94319,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+58ec92d8-8a43-4b91-a14d-43523cee0dff,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+e7768858-1281-4d34-a0e3-1af5c435e2df,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+62be00f4-1638-470e-a9f3-e666d73ffeed,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+fa59b218-d903-41f9-a7f9-ef4a8eebdf2f,3760002000176,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-17/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+650156e6-ac8d-489d-aa63-813818f05658,3760002000183,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-18/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+4ab7b791-7a86-4d5b-aaa9-17b8125eec22,3760002000190,DOLIPRANE 1 G,https://picsum.photos/seed/x-19/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+0f69f6f1-0a83-475d-a8f9-43f13d1e19aa,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+69b1a3c4-863a-4dd1-8ce8-595f1dbb0228,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+cfa9ad20-55fd-44c1-b2cc-fdafdfb0df81,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+1aaf29c9-6fa7-47e7-9171-b63c9ab542d6,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+7cc08b7b-76b1-495a-88f5-9a3f62a66481,,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+4aa643d7-50bd-4c6f-8852-b32f02956b26,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+7dae15e6-7a4e-4478-a089-f69d7aa7272e,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+6a8de37a-5602-4d19-9ed3-7ce7cd24e6c5,3760002000275,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-27/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+6ce19bb6-6fbe-492b-b2cf-e4508e4a43cc,3760002000282,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-28/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+82ed9a09-1a91-4dc6-90e7-a4bf4959307a,3760002000299,DOLIPRANE 1 G,https://picsum.photos/seed/x-29/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+7b7a37de-3308-48bf-ad14-2c9fae8c4206,,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+d3865353-932a-4f49-bb59-290f0c708fe7,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+e6887cb4-d6f4-4554-85f8-6e939d7dc135,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+c61eaa82-c6f9-4677-8ad7-eb10aac6a767,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+097f7957-995f-48c8-947c-3246508d3a1e,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+c01a8a1d-f069-41e8-9159-d1d4f50bef7a,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+59215311-98a6-4384-90f5-ce9d85cabd1f,,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+13628c2a-0017-4353-9e56-de1343e34f7f,3760002000374,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-37/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+7eda87f9-f6c0-49c0-9ae0-616690fe7d59,3760002000381,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-38/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+304e4b3c-bdfa-43c3-857f-75bd143d5823,3760002000398,DOLIPRANE 1 G,https://picsum.photos/seed/x-39/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+32f559aa-0173-412f-938e-0aa94b9758e8,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+96f6d193-912c-491c-ba17-2574e28eec98,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+500f8a45-468c-4890-8ebe-a582e158dc10,,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+9ac55655-34f1-43d0-8cc1-6dcd1f088784,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+f5a71dbb-43a9-4940-ad50-e109de623ba7,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+2f1a293c-858d-450c-9f90-22ec763d39a0,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+b73d38de-6d14-48e6-9f0e-491613816c41,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+34226dcc-35c1-4738-ae63-224dc3e0cfed,3760002000473,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-47/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+0616eff3-026d-4288-b2ac-99eb0e9b8425,3760002000480,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-48/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+b6d99717-ea19-43d4-950a-0c4307a8b716,3760002000497,DOLIPRANE 1 G,https://picsum.photos/seed/x-49/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+baf92c87-14fd-4e81-8b99-eb11075ac14c,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+552eea2b-f120-43cb-85a2-b1f99a603708,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+058783a5-1189-4601-a34a-16fb4db62e22,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+e6fa660c-a274-4b70-9716-30f9a8c83a0a,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+5af7f334-5e04-4d1a-b848-b53616d7cffb,,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+d251c65f-a2b1-421d-bfae-d906b8e57d42,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+3981e99b-a05c-45e3-b50e-0c016580344d,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+0b7a61f2-3aa7-4308-a3b2-87b1b8e8cf97,3760002000572,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-57/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+a0bc8e71-8c28-47af-94e9-fd19ab72545b,3760002000589,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-58/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+0d0bca83-b6b3-4aab-b502-8825b0192a9d,3760002000596,DOLIPRANE 1 G,https://picsum.photos/seed/x-59/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+59a49aa5-21de-4401-8dde-f721ab0ee7ee,,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+adc6447e-9fc9-467a-bde3-7108f31b5607,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+31c937b9-aade-48fb-8bcc-753367645b8d,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+103e0942-f4d0-472f-a0a1-6b7c6ffcf663,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+16916712-fe76-4f34-ba6d-8fc1036894c0,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+cff47a75-bc9c-4c1f-84e7-6b546562c545,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+0fe0ff0c-13ea-474a-8e38-08a4ca21e53a,,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+2c27dd81-d6f2-47b8-ba39-3219a865d7fe,3760002000671,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-67/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+bc2ce341-c2a6-4d88-8d50-bd42de682a42,3760002000688,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-68/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+776b655b-49b2-4997-b600-121785b3567a,3760002000695,DOLIPRANE 1 G,https://picsum.photos/seed/x-69/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+9ff47bdd-a3d9-4392-be3b-39079a143614,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+ca3f5cc8-a5c2-4da3-a551-45e2bfd2266d,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+49d72fbc-0f54-463c-8a32-704548af10a2,,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+80eebdc9-1355-4585-8d0c-f84bb25bee82,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+0d0730c6-e67f-4054-921e-723c5d223571,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+01db030d-7664-4133-a5ee-dd326063d4a6,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+cb953f49-3c4a-4eac-b503-b7f7c2bfecd4,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+9fcf31f2-52aa-4627-b216-bb26656797ac,3760002000770,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-77/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+aa969364-ff95-4c38-86cb-f27ef72bf267,3760002000787,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-78/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+291b18c4-df8c-473c-8f59-a5f441e7ae8d,3760002000794,DOLIPRANE 1 G,https://picsum.photos/seed/x-79/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+012c859e-2a98-411b-be0c-a1440c9827e9,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+15690dd3-3514-4c30-a0a3-ff4231792a45,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+305f61f5-99c6-410e-8428-839299e15a35,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+deb48081-a493-47ff-8599-ac4ab7882c34,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+f62558cf-34e3-4a32-8fe4-da2cf20ae93d,,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+14709fb7-0025-4342-9364-8368f410915b,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+d43d7f6e-f08c-44d9-8b7f-d9291fc3295a,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+412cd3c7-e964-490e-bbfc-a700e39ffaa8,3760002000879,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-87/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+43a2c1aa-6cb9-4be4-bf03-e0a6d9283414,3760002000886,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-88/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+be84226d-6288-4494-9291-7e34a76a6bfa,3760002000893,DOLIPRANE 1 G,https://picsum.photos/seed/x-89/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+3bc4950c-b845-474c-941e-ffd8becd327e,,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+22e99bbe-71af-4361-afb4-73d03fced9ec,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+099cd974-54f0-4e2b-bb5e-db17cb32f885,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+6b027050-7b18-4854-9341-ab9e3c265c28,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+a83b59e1-22f1-4db4-97df-a2e3ce3402c4,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+ccc363d5-4b10-4a94-89c2-da8b630dbf22,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+2e69eb2e-5ffc-40e2-84e6-841e9458abf2,,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+9bc48036-2c56-461b-bfec-7fbbb600f7bc,3760002000978,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-97/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+6ed99e5d-0807-43c6-a5a3-2cbaa200f665,3760002000985,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-98/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+f08df1c8-bba2-4e0c-a1e1-2de1e9164cdf,3760002000992,DOLIPRANE 1 G,https://picsum.photos/seed/x-99/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+f93dfcac-810e-4ba4-9280-f9e2fe04e530,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+7779430e-45a3-45fd-bd17-8a4a3194cdf0,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+23a7d321-9624-4e3f-afbb-c0826201d9d7,,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+2cd757f3-afd3-4116-b4d5-0d0dcff997c1,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+c8d93345-86b1-48b2-9505-89b6f245911f,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+7da74d75-7a57-43a0-8413-66929a4c24f1,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+5e5a9c18-36b1-4ddb-958c-873a0ee578eb,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+61cd0d0a-6f27-446c-a5ae-4b983b3f998e,3760002001074,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-107/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+3067a93c-4f13-4bbc-b351-0de9acb65c00,3760002001081,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-108/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+56478cbe-44df-4604-a8e6-03215dd56f35,3760002001098,DOLIPRANE 1 G,https://picsum.photos/seed/x-109/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+33927074-a0f0-423e-8686-7d4c60d5c36f,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+023e8132-de80-446c-aff6-386c9328a025,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+e2108d58-66de-446a-9e9a-e98dc0f9dc1d,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+3f1a3168-3159-43a2-9928-e02f1e8ded9e,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+cffc584b-f98c-4d30-8218-ed28309cb1f6,,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+45ad123b-7ff2-4830-be80-cf8ac28436d5,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+4adb8660-b050-4f96-91d3-a4afddc1a6b1,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+7fd9e460-b62e-4e1d-8549-eb5d1b895401,3760002001173,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-117/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+8ccf54df-202b-4dd2-aca8-3d09d0b17e82,3760002001180,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-118/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+9b61aac9-a97c-4d1c-a594-cde3d4c467aa,3760002001197,DOLIPRANE 1 G,https://picsum.photos/seed/x-119/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+cdc9db60-f563-477d-bec9-2c6ecbf85480,,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+446978a6-920c-4682-9067-ad335e4e2c9f,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+cc0765d4-dca5-4caf-93cd-023b46d51d0a,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+6c1c102b-e0e4-4b32-9432-6b16155eefa7,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+5f465da0-eb19-40cd-8a27-fd158c1a488d,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+b6d7d165-902c-4e96-ab51-4c86ff0e9e09,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+edcde8d5-a821-4251-973b-da2073d271e2,,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+6bdcbe64-0c00-43f5-b5ab-bc68bb99ceef,3760002001272,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-127/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+5fa62b74-3568-4666-b0e3-c144693fcb89,3760002001289,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-128/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+606cbc51-10d5-46da-b5fc-cb7f5cc7de01,3760002001296,DOLIPRANE 1 G,https://picsum.photos/seed/x-129/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+092dbf3d-118d-4e57-b67c-fc3d5cd4c43c,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+34804fec-dee4-4791-8cde-92870b98405e,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+7181a65f-96af-463e-8a32-bd861c064b43,,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+9085f8ed-a4ed-4da5-b43c-1d3797db72fa,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+a558168d-030a-41cb-867d-641d026cdf18,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+708605c9-e8fb-4583-91d6-3d225a19f451,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+36d71598-291b-48cc-8982-ae820353ca27,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+f1c1b325-e0b5-40cf-a61c-1146e4665fa5,3760002001371,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-137/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+379eddbc-5eb5-479e-a44c-baabc159d382,3760002001388,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-138/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+16d2c68c-fe6b-423c-85d6-e9a347feb2db,3760002001395,DOLIPRANE 1 G,https://picsum.photos/seed/x-139/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+0544aa8f-6014-4c28-a1ef-9e860c9c4ccc,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+b6415561-eb61-4ed4-aba0-290bc1a2bedd,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+4aac4ce2-3757-4afb-9040-bf7e6933ad1f,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+79dd0535-0862-49e6-bdd6-c364dca2b004,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+ca5adcee-d31a-411d-a154-9f730ab330ad,,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+178bcae0-0ee1-4b0b-bfcd-3967d5aa16a2,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+cb3fcf1c-5b18-4143-8773-e42139af60b7,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+998be79c-2870-4380-8a2d-ba167ea8017b,3760002001470,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-147/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+ef4ebdc3-25a2-4710-8bb0-9229e6598b6f,3760002001487,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-148/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+d191cb48-9f1c-4811-82fb-ff30da4bcc4c,3760002001494,DOLIPRANE 1 G,https://picsum.photos/seed/x-149/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+b657beda-9fdc-4f15-80b1-7a160b5bf2d8,,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+d56f51e2-6b65-45bc-b171-33f562d128b2,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+4650b524-f95d-4f57-96b3-4e62c24a60da,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+8263b962-02e2-4ee9-94cf-b80134649cda,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+c4e16a6c-1f32-47fe-84bb-8342c620984a,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+28951759-9377-421e-970e-6df3422d3f9e,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+75f7dad0-5d76-4a44-8078-94d5ed0a2ccc,,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+5cf930b7-154f-4e3b-aa71-d1c893f90170,3760002001579,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-157/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+0ed94d76-5693-450f-8a30-2f0936134415,3760002001586,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-158/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+08978678-4e9e-4f6a-b7cd-4e13f73a1adc,3760002001593,DOLIPRANE 1 G,https://picsum.photos/seed/x-159/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+dc868269-a65d-4348-a944-abc927cd714e,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+f388b079-1abe-4f8e-a6a3-d9f9c66c0a62,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+3c8e2938-d79d-4ee2-b946-be885c3adfe8,,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+acf1afd7-77dd-46aa-a390-4bb579b369d8,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+cd4dac21-19ec-45c6-a5b4-63d6c944e18e,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+c2cf0aac-6d8e-4974-9edd-01a7ee61f394,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+0b37b14f-2219-45fe-8e59-0b1628159971,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+5d4967dd-f312-48a9-bb74-821afdeac48e,3760002001678,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-167/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+8718d838-5fa3-4d3c-b9a1-a62ea99ace1d,3760002001685,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-168/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+20645a4c-789f-45a1-9148-dc7b1e02edd3,3760002001692,DOLIPRANE 1 G,https://picsum.photos/seed/x-169/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+45297c0f-7e62-4eca-aae2-32ec0fa8f5d5,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+6359352e-d287-4573-b70c-93e11b4877dc,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+8ec7751b-7afe-411c-b33f-183dda198670,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+d783ac81-87ac-49d1-b256-4222530e4e39,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+e5f51793-2085-486a-ba71-4f8a231b5c41,,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+d2af768e-dc58-494d-a6dc-309c7ad946b7,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+47feb418-0062-43b4-8ab4-84b4616c775a,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+e3527e1e-92f3-44fb-a7ce-7d0f33d8bcff,3760002001777,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-177/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+06b3a804-7e21-49f0-a315-11a059d5acdd,3760002001784,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-178/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+00ec988f-5168-48f8-b0b0-aa56d57c8a67,3760002001791,DOLIPRANE 1 G,https://picsum.photos/seed/x-179/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+e2c5b877-d0a3-426e-8ba8-ae5ce0f15a34,,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+6f24789e-af7b-4725-8f67-57b52cc8420a,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+2dd08ecd-7854-4865-a579-68b5fc9d7e48,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+9aa59326-d8ce-439f-9e71-7b5fc6623235,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+a4e0eeb4-0e9a-4a79-8375-0e9c704c097e,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+7037af7f-b83a-425a-ac1f-18ebb47f376f,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+7e66a878-7bd9-4d9d-91e9-250a5664ff38,,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+60913bb9-64df-4bf7-87a2-91aa98cc9647,3760002001876,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-187/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+7e376eb6-2dd9-4735-8681-d9d8c868f6f1,3760002001883,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-188/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+6b190990-4956-472f-92b4-1a25b236966d,3760002001890,DOLIPRANE 1 G,https://picsum.photos/seed/x-189/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+f7e263e1-88ac-4b28-9513-054ff28943bb,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+b1c0a581-d915-4580-8133-ba0940d8385a,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+4fe48c2a-4f56-49a0-a50f-8db9c848350e,,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+550d922b-9673-41b4-8131-8edec25e15c3,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+738f556a-858b-47ba-a597-95c60f4c41ad,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+f0300d38-4c33-427f-9825-2d9709f05571,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+3fb55233-b318-4c39-be21-c10d9a09c9d9,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+0359412f-15cc-4553-b52e-b7b6e4d8ee79,3760002001975,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-197/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+ff428bcd-2587-4d87-a7ba-10a93ace162e,3760002001982,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-198/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+4b2aca93-18e4-41ca-8c5e-b79fe471cc08,3760002001999,DOLIPRANE 1 G,https://picsum.photos/seed/x-199/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+ac639195-d15a-40e5-bc16-38dcd77bd3cb,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+2be211a9-abed-4fce-937c-d082be19f79c,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+452cf7a2-cc93-4ac2-802c-19ecb0924928,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+59fc21ef-f907-4edf-a5e0-33c1251b4810,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+9a178dd6-3ef2-43f7-b84c-7e5edeb66333,,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+e516a984-9495-4d1b-a248-26c512f0dd80,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+41536284-6929-4b23-90cb-9b726f0e5758,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+19bd0536-c570-4121-bd2b-64cd255373bc,3760002002071,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-207/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+04b0e80b-edbe-40ab-bbf2-7c3053311b16,3760002002088,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-208/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+a250fa75-331a-4ed7-ba81-6e8d2a3f2188,3760002002095,DOLIPRANE 1 G,https://picsum.photos/seed/x-209/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+5d1fdaef-e5d9-4b6e-9042-8946164284b9,,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+7527fbc0-1509-44aa-9735-78515b8e9cd6,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+f6a4da9c-2f27-475f-be73-adc4b103376a,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+7901c0ec-becb-4f80-a7e0-a84c5a4cb7a3,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+01549270-2bf1-4b32-8c42-b6d6bac532c8,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+225d72ab-1369-4eca-93ce-30ffd44a54a5,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+2681f973-dd66-4eab-b580-50a6f576757c,,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+350e5439-910f-4e88-8efb-24c03dc8ceb0,3760002002170,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-217/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+e61ea88d-b752-4765-a694-e356c94c695b,3760002002187,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-218/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+71703de9-5682-44d7-b72d-5b665b604722,3760002002194,DOLIPRANE 1 G,https://picsum.photos/seed/x-219/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+b4787b67-7f31-4533-9247-93f6247fa143,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+2e1cb9ba-175d-412d-9f8f-07fbcdaee98b,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+19aee612-b8a9-4820-84cb-16a5129c5b1b,,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+f8a15184-d471-4792-b0d2-9b06d0203b14,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+40c5a8b3-5a00-4838-bce3-f5bd80e56cb1,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+af549319-0f80-428c-8d27-e2616de0c1f1,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+f50cc365-d482-4e31-b41a-ef42fb9f3322,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+c5aaf4db-ea40-4bc3-b671-9b0e93491b8a,3760002002279,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-227/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+e8022721-0376-4614-8d6d-ea824e193db9,3760002002286,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-228/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+1bbb63e8-fda8-4a16-82ee-2251aa1fb8f2,3760002002293,DOLIPRANE 1 G,https://picsum.photos/seed/x-229/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+c7f53700-0a9d-4a6f-af77-caa05780f753,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+77ea1fd2-eb93-4858-bf33-d55ae943d7f8,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+38ee94a4-f113-4757-bccc-ffa581f156e6,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+2f893838-a6d2-481c-bf47-806e9200af73,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+5e5a2de3-4c4a-4185-b946-57925d8b2eea,,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+f7e40485-6fe2-48a5-b106-c197d49e6cc4,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+5dff96ab-d65d-4a6a-a73c-b8c4c215af18,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+ac61fbeb-3a68-42dd-8498-162f46ffa4a7,3760002002378,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-237/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+aea2e6d3-c00a-4b2d-9955-7facc9555ff0,3760002002385,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-238/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+13ed4a33-82ea-41b3-9b32-5e8cec57668b,3760002002392,DOLIPRANE 1 G,https://picsum.photos/seed/x-239/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+9233c2fb-c450-44a8-99fa-88f9cbdd0903,,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+bd597299-9859-4aeb-8dbd-b993c15e1d65,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+a2248c34-a595-4a3a-af4a-31aabbfc4266,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+cebc79a0-51b5-4615-89a3-6f23718baa4e,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+541cf03f-26f1-4308-bd70-cd0fe1ab2bc6,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+8c30a294-eb1c-4fb2-b85f-2746caff7be8,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+40b079ee-ceb9-49ab-a1c5-b1dc9cd22deb,,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+710b5af1-bd62-4a3d-83c1-cd27bbcb07bd,3760002002477,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-247/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+f626c0ad-f03a-40dd-8da2-21ae42dc636e,3760002002484,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-248/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+af3ca203-165e-4d52-96a0-2c61ff848258,3760002002491,DOLIPRANE 1 G,https://picsum.photos/seed/x-249/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+c2eb19f4-5512-4668-929d-2242e3ad73f9,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+23f1f0fc-2034-4422-9f8e-dff4641b29af,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+de76cb22-0aea-4fb7-815e-aff57bef6bab,,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+ebb1fe0d-6d3a-4f1c-8b4e-dc33f54f3bdf,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+6f7b6ed1-f6ec-454d-aba7-0f72aa2c7b7a,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+7edec738-f93e-46d5-8c68-c635207a0ffa,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+33b211bb-5e2a-4994-890c-0816bfb00dc3,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+63cb439a-64c9-49e1-8268-9f2e82938cd5,3760002002576,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-257/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+c6fa0a6b-00b0-4df3-82d2-c41012a04d3f,3760002002583,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-258/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+63d447df-2dac-43fb-8395-019f258cc910,3760002002590,DOLIPRANE 1 G,https://picsum.photos/seed/x-259/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+4d302285-894d-4d49-863a-0fe96f015ccd,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+99f9dd9a-ad9b-4848-81dc-adc7f61e53b9,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+b9419567-33ee-481f-ada7-6f95de274bbd,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+24511efc-7660-4ef1-a9ef-01579ae2f89f,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+a4c1c822-a778-4daa-a7ff-08c7e41828e6,,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+77b8bfb5-f94a-4ab2-8ac0-0794701fee39,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+a7f93ffc-22b4-41b2-9387-8ed192bd9e8e,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+d6b0c901-93bd-404f-88b3-e1fca1234d92,3760002002675,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-267/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+7bb2c844-42af-406e-b6b8-3f87b092f624,3760002002682,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-268/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+42da55aa-1b82-4efe-a659-5bcf5ce55d81,3760002002699,DOLIPRANE 1 G,https://picsum.photos/seed/x-269/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+92ed08da-9718-4026-980f-39184dbf1d11,,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+8c560cf9-85f1-4004-8aad-04fa92ca7035,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+37923a73-598b-49f3-b560-5a2f9e7bf300,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+ea849ebe-58c3-4c15-86dc-d16f8dcdf3f8,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+359e7b74-d982-467f-a532-f5444e5ab045,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+97d60963-acf3-44a7-92a2-0527850fea8a,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+a9965b41-c540-43fe-9c88-0d49a012c766,,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+ec753d2f-ce2f-4a48-bd51-24596e74d7af,3760002002774,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-277/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+6c38acc1-759c-4d4f-92af-c913fa97b839,3760002002781,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-278/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+279391b4-d2c3-4765-9e85-f3737e515033,3760002002798,DOLIPRANE 1 G,https://picsum.photos/seed/x-279/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+26c571f0-dda8-4c3c-90c0-0330ddd5d34d,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,33
+852d0e66-80dc-42a3-af83-cf57501ce2cd,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+185766e5-5e84-47e4-a03c-e9a98ccf7304,,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,
+a671664f-d492-47cf-a5a4-3623293fb235,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+b37554c6-3955-4b2e-ae82-5f9cb382806c,abc-pas-un-ean,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,33
+fb6fbf82-fcb0-4cab-8c29-38620df8b1f0,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+bb2d6e5f-f132-4367-b444-414619c5d102,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,
+67bd3162-ec88-4836-b827-2da1846ce431,3760002002873,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-287/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+6597b08c-33e0-4ddc-84ee-87e9a515ce11,3760002002880,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-288/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+35693d6e-d377-42b0-b1af-108ca8517e8a,3760002002897,DOLIPRANE 1 G,https://picsum.photos/seed/x-289/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1
+e8c373bb-a82d-4fd3-adbd-26c15be5bcf5,abc-pas-un-ean,CAFÃ‰ POM B 1K C1,not-a-url,ALIMENTAIRE,,,,
+f8d755c5-3d3b-4f41-93d2-6c0383fbe22e,,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+cc1a482e-dd2b-4b42-96ce-6d253c4df6d1,abc-pas-un-ean,CAFÃ‰ WHISKY ECOSSAIS 70 CL,not-a-url,ALIMENTAIRE,,,,33
+8bd19ebc-6c3b-47b7-893a-2fd19025abfd,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+ceb74bde-cbf4-481e-bca3-7cd5d5035d72,,CAFÃ‰ NUTELLA 750 G,not-a-url,ALIMENTAIRE,,,,
+733d4bc4-3bd5-44c5-aa8f-6dd66140fc9d,abc-pas-un-ean,,ftp://serveur.interne/img.png,ALIMENTAIRE,,,,
+1255c1fd-b131-4010-8acf-c02a39771d93,abc-pas-un-ean,CAFÃ‰ CREME FRAICHE 30 20CL,not-a-url,ALIMENTAIRE,,,,33
+9f9b6769-941d-4e52-a63d-28945180aa72,3760002002972,LESS LIQUIDE 200CL,https://picsum.photos/seed/x-297/640/480,NON ALIMENTAIRE,ENTRETIEN,LESSIVE,LIQUIDE,20
+e9f547e1-0f96-4e31-996d-a674aa1cd960,3760002002989,COUCHES PAMP TAILLE 4,https://picsum.photos/seed/x-298/640/480,NON ALIMENTAIRE,BEBE,COUCHES,TAILLE 4,20
+b45080c7-8613-43ae-ad51-c7b32545a188,3760002002996,DOLIPRANE 1 G,https://picsum.photos/seed/x-299/640/480,SANTE,MEDICAMENTS,ANTALGIQUES,PARACETAMOL,2.1

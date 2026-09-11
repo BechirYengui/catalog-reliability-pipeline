@@ -1,0 +1,16 @@
+[Unit]
+Description=Traitement quotidien des catalogues magasins
+Documentation=https://github.com/BechirYengui/catalog-reliability-pipeline
+
+[Timer]
+# Les magasins deposent la nuit ; on traite tot le matin pour que les rapports
+# soient prets a l'ouverture.
+OnCalendar=*-*-* 05:30:00
+# Decale le declenchement de 0 a 10 min : evite de tomber pile a la meme
+# seconde que les taches de sauvegarde des autres services du serveur.
+RandomizedDelaySec=10min
+# Rattrape le run si le serveur etait eteint a l'heure prevue.
+Persistent=true
+
+[Install]
+WantedBy=timers.target
