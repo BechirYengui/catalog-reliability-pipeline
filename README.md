@@ -1,5 +1,7 @@
 # Catalog Reliability Pipeline
 
+[![CI](https://github.com/BechirYengui/catalog-reliability-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/BechirYengui/catalog-reliability-pipeline/actions/workflows/ci.yml)
+
 **Fiabiliser un catalogue magasin de 10 000 lignes coûte environ 0,44 $ de LLM
 au lieu de 16 $, puis 0,02 $ le lendemain : le LLM ne paie que les 273 libellés
 distincts qu'aucune règle ne sait corriger, jamais les 10 000 lignes.**
@@ -26,6 +28,14 @@ Ce que le coût ne dit pas :
 - **L'humain ne tranche que ce dont l'erreur coûte cher.** La TVA n'est jamais
   modifiée automatiquement, et chaque correction garde sa valeur d'origine, son
   auteur (règle, LLM ou humain) et son horodatage.
+
+Le projet est né d'un exercice technique d'ULTY :
+[l'énoncé](exercice/ULTY_Cas_pratique_Automatisation.pdf),
+[ma réponse](exercice/ULTY_Cas_pratique_Automatisation_Bechir_Yengui.pdf) et
+[ses annexes techniques](exercice/ULTY_Annexes_Techniques.tex). La source LaTeX
+de la réponse ([`.tex`](exercice/ULTY_Cas_pratique_Automatisation.tex)) fait
+foi : chacun de ses chiffres est recalculé depuis le fichier fourni par
+`tests/test_doc_claims.py`.
 
 ---
 
@@ -202,7 +212,10 @@ web/                   React 18 + Vite + TypeScript + Tailwind
 config/                règles versionnées (taxonomie, TVA, suffixes marketing)
 deploy/                vhosts nginx, unité systemd + timer, scripts d'inbox
 tests/                 données de test = extraits RÉELS du CSV
+scripts/               profilage du CSV, générateur des jeux de test
+exercice/              énoncé, réponse (LaTeX + PDF), annexes techniques
 docs/profiling.md      les mesures qui fondent chaque règle
+docs/jeux-de-test.md   jeux de test synthétiques et résultats attendus
 docs/plan.md           plan des 5 phases
 ```
 

@@ -83,10 +83,13 @@ une interface web de revue humaine.
   fois les suffixes marketing détachés. C'est ce second nombre que le LLM voit.
 
 ## Commandes utiles
-- `make dev` : lance postgres (docker) + api (uvicorn reload) + front (vite)
+- `make install` : dépendances (uv) ; `make help` liste toutes les cibles
 - `make pipeline FILE=data/samples/store_listing_produit.csv` : run complet local
-- `make test` : pytest ; `make lint` : ruff + mypy
-- `make deploy` : déploiement VPS (voir scripts/deploy.sh)
+  (`make pipeline-offline` : sans réseau)
+- `make test` : pytest ; `make lint` : ruff + format + mypy strict
+- Plateforme en local : postgres en docker, `uvicorn api.main:app --reload`,
+  `cd web && npm run dev` (détail dans le README, « Démarrage rapide »)
+- Déploiement : workflow `deploy.yml`, déclenché à la main (pas de make)
 
 ## Accès au serveur
 > **2026-09-11 : TOUT le catalog a été SUPPRIMÉ du VPS, à la demande de
@@ -139,21 +142,25 @@ une interface web de revue humaine.
 - [x] Phase 0 : scaffolding, profilage du CSV réel, plan validé
 - [x] Phase 1 : socle + ingestion + contrôles déterministes
       (10 000 lignes en 2,2 s hors réseau, 4 min avec vérification des 9 085 URLs)
-- [~] Phase 2 : dédup exacte + golden records faits (10 000 → 273) ;
-      reste le flou : blocking, RapidFuzz, embeddings (étape 4b)
-- [~] Phase 3 : étage LLM fait (client, cache, lots, budget, comptabilité du
-      coût, prompts, chiffrage --dry-run). Cache LLM en base et enveloppe
-      cumulée (5 $) partagés par les DEUX chemins d'exécution : l'API et la
-      CLI du timer de nuit. Reste : le scoring/aiguillage par champ.
-- [~] Phase 4 : schéma, authentification, API HTTP, front React et conteneurs
-      api/web livrés et déployés. Alembic en place (`db/migrations`), appliqué
+- [x] Phase 2 : dédup exacte + golden records (10 000 → 273), puis
+      quasi-doublons par blocking + RapidFuzz (`entity_resolution`).
+      Embeddings écartés : le LLM comble déjà le fossé sémantique.
+- [x] Phase 3 : étage LLM (client, cache, lots, budget, comptabilité du
+      coût, prompts, chiffrage --dry-run) et aiguillage par champ
+      (`scoring_routing`). Cache LLM en base et enveloppe cumulée (5 $)
+      partagés par les DEUX chemins d'exécution : l'API et la CLI du
+      timer de nuit.
+- [x] Phase 4 : schéma, authentification, API HTTP, front React et conteneurs
+      api/web livrés. Alembic en place (`db/migrations`), appliqué
       au démarrage : `create_all()` ne servait plus qu'aux tests.
       Le référentiel porte l'état courant de CHAQUE magasin, avec identité de
       fiche stable d'un dépôt à l'autre et rattachement des lignes sources
       (`product_source_rows`).
       Le vhost de la plateforme attend dans `deploy/catalog-platform.nginx` —
       NE PAS l'installer avant que les conteneurs existent (502 garanti).
-- [ ] Phase 5 : durcissement + déploiement VPS
+- [~] Phase 5 : déploiement VPS fait (TLS, CI/CD, timer de nuit), puis
+      retiré du serveur le 2026-09-11 à la demande de l'utilisateur.
+      Reste le durcissement (sauvegardes, supervision) si on redéploie.
 
 ## Journal de session
 - 2026-08-09 — Scaffolding + profilage du CSV (voir `docs/profiling.md`).
